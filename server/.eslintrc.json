@@ -1,0 +1,12 @@
+{
+  "env": {
+    "node": true,
+    "es2024": true
+  },
+  "extends": [
+    "../.eslintrc.json"
+  ],
+  "rules": {
+    "no-console": "off"
+  }
+}
