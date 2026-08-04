@@ -1,13 +1,13 @@
 export const QUESTION_TYPES = {
   TECHNICAL: 'technical',
   BEHAVIORAL: 'behavioral',
-  SITUATIONAL: 'situational'
+  SITUATIONAL: 'situational',
 };
 
 export const SESSION_STATUS = {
   IN_PROGRESS: 'in_progress',
   COMPLETED: 'completed',
-  ABANDONED: 'abandoned'
+  ABANDONED: 'abandoned',
 };
 
 export const FILLER_WORDS = [
@@ -22,5 +22,5 @@ export const FILLER_WORDS = [
   'I mean',
   'kind of',
   'sort of',
-  'literally'
+  'literally',
 ];

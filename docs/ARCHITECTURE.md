@@ -7,10 +7,10 @@ VocaPrep uses a modern MERN stack combined with an agentic AI pipeline.
 1. **Frontend (React)**: Handles user interaction, Web Audio API recording, and visualization.
 2. **Backend (Express)**: Manages authentication, database operations, audio proxying, and AI orchestration.
 3. **LangGraph Pipeline**:
-   - *Question Generator*: Pulls role context and past weaknesses to generate tailored questions.
-   - *Content Evaluator*: Analyzes transcript for correctness and structure (STAR).
-   - *Delivery Evaluator*: Computes WPM, filler word rates, and pauses from word-level timestamps.
-   - *Coach Synthesis*: Combines content and delivery evaluations into actionable feedback.
+   - _Question Generator_: Pulls role context and past weaknesses to generate tailored questions.
+   - _Content Evaluator_: Analyzes transcript for correctness and structure (STAR).
+   - _Delivery Evaluator_: Computes WPM, filler word rates, and pauses from word-level timestamps.
+   - _Coach Synthesis_: Combines content and delivery evaluations into actionable feedback.
 
 ## Graph Diagram
 

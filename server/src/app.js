@@ -9,10 +9,12 @@ const app = express();
 
 // Middleware
 app.use(helmet()); // Security headers
-app.use(cors({
-  origin: env.CLIENT_URL,
-  credentials: true
-})); // CORS
+app.use(
+  cors({
+    origin: env.CLIENT_URL,
+    credentials: true,
+  })
+); // CORS
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
@@ -25,8 +27,10 @@ app.get('/', (req, res) => {
   res.send('VocaPrep API is running...');
 });
 
+import authRoutes from './routes/authRoutes.js';
+
 // Setup api routes (will be implemented in later modules)
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/users', userRoutes);
 // app.use('/api/sessions', sessionRoutes);
 
