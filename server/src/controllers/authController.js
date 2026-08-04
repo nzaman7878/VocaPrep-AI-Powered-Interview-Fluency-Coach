@@ -52,3 +52,48 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, 'Failed to register user');
   }
 });
+
+/**
+ * @desc    Login user
+ * @route   POST /api/auth/login
+ * @access  Public
+ */
+export const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new ApiError(400, 'Please provide email and password');
+  }
+
+  // Find user and explicitly select passwordHash
+  const user = await User.findOne({ email }).select('+passwordHash');
+
+  if (!user) {
+    throw new ApiError(401, 'Invalid credentials');
+  }
+
+  // Check if password matches
+  const isMatch = await user.comparePassword(password);
+
+  if (!isMatch) {
+    throw new ApiError(401, 'Invalid credentials');
+  }
+
+  // Generate tokens
+  const { accessToken, refreshToken } = generateAuthTokens(user);
+
+  // Remove passwordHash from response
+  user.passwordHash = undefined;
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        user,
+        accessToken,
+        refreshToken,
+      },
+      'User logged in successfully'
+    )
+  );
+});
