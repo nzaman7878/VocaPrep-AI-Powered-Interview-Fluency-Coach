@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { ROLES } from '../../shared/roles.js';
+import { ROLES } from '../../../shared/roles.js';
 
 const userSchema = new mongoose.Schema(
   {
