@@ -6,7 +6,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ROLES } from '../../../../shared/roles.js';
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', targetRole: ROLES[0].id });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    targetRole: ROLES[0].id,
+  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.auth);

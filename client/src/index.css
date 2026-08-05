@@ -6,11 +6,11 @@
   --color-primary: #6c5ce7; /* Purple */
   --color-secondary: #00cec9; /* Teal */
   --color-accent: #ff6b9d; /* Warm pink */
-  
+
   --color-background: #0f0f1a; /* Dark */
   --color-surface: #1a1a2e; /* Card backgrounds */
   --color-surface-elevated: #232342; /* Hover/active states */
-  
+
   --color-text-primary: #e8e8f0;
   --color-text-muted: #8888a0;
 
@@ -44,7 +44,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6, .font-display {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display {
   font-family: var(--font-display);
 }
 
