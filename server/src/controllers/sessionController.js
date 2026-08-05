@@ -1,4 +1,5 @@
 import Session from '../models/Session.js';
+import ProgressSnapshot from '../models/ProgressSnapshot.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
@@ -76,4 +77,76 @@ export const getSessionById = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(new ApiResponse(200, session, 'Session retrieved successfully'));
+});
+
+/**
+ * @desc    Update session status
+ * @route   PUT /api/sessions/:id
+ * @access  Private
+ */
+export const updateSession = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+
+  const session = await Session.findOneAndUpdate(
+    { _id: req.params.id, userId: req.user.id },
+    { status },
+    { new: true, runValidators: true }
+  );
+
+  if (!session) {
+    throw new ApiError(404, 'Session not found');
+  }
+
+  res.status(200).json(new ApiResponse(200, session, 'Session updated successfully'));
+});
+
+/**
+ * @desc    Mark session complete and create ProgressSnapshot
+ * @route   POST /api/sessions/:id/complete
+ * @access  Private
+ */
+export const completeSession = asyncHandler(async (req, res) => {
+  const session = await Session.findOne({
+    _id: req.params.id,
+    userId: req.user.id,
+  });
+
+  if (!session) {
+    throw new ApiError(404, 'Session not found');
+  }
+
+  if (session.status === 'completed') {
+    throw new ApiError(400, 'Session is already completed');
+  }
+
+  session.status = 'completed';
+  session.completedAt = Date.now();
+  await session.save();
+
+  // Create ProgressSnapshot if questions exist
+  if (session.questions && session.questions.length > 0) {
+    const totalQuestions = session.questions.length;
+
+    const totals = session.questions.reduce(
+      (acc, q) => {
+        acc.wpm += q.deliveryMetrics?.wpm || 0;
+        acc.fillerRate += q.deliveryMetrics?.fillerRate || 0;
+        acc.contentScore += q.contentScore || 0;
+        return acc;
+      },
+      { wpm: 0, fillerRate: 0, contentScore: 0 }
+    );
+
+    await ProgressSnapshot.create({
+      userId: req.user.id,
+      sessionId: session._id,
+      sessionRole: session.role,
+      totalQuestionsAnswered: totalQuestions,
+      avgWpm: totals.wpm / totalQuestions,
+      avgFillerRate: totals.fillerRate / totalQuestions,
+      avgContentScore: totals.contentScore / totalQuestions,
+    });
+  }
+
+  res.status(200).json(new ApiResponse(200, session, 'Session completed successfully'));
 });

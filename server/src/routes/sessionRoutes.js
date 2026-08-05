@@ -1,5 +1,11 @@
 import express from 'express';
-import { createSession, getSessions, getSessionById } from '../controllers/sessionController.js';
+import {
+  createSession,
+  getSessions,
+  getSessionById,
+  updateSession,
+  completeSession,
+} from '../controllers/sessionController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -9,6 +15,8 @@ router.use(protect);
 
 router.route('/').post(createSession).get(getSessions);
 
-router.route('/:id').get(getSessionById);
+router.route('/:id').get(getSessionById).put(updateSession);
+
+router.post('/:id/complete', completeSession);
 
 export default router;
