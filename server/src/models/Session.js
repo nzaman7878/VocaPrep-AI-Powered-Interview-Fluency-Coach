@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const QuestionAttemptSchema = new mongoose.Schema({
   questionText: {
@@ -81,4 +81,4 @@ const SessionSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Session', SessionSchema);
+export default mongoose.model('Session', SessionSchema);

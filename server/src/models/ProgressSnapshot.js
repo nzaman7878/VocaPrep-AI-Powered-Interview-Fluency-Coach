@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ProgressSnapshotSchema = new mongoose.Schema(
   {
@@ -46,4 +46,4 @@ const ProgressSnapshotSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('ProgressSnapshot', ProgressSnapshotSchema);
+export default mongoose.model('ProgressSnapshot', ProgressSnapshotSchema);
