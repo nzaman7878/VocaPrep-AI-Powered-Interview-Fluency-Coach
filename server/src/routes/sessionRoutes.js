@@ -6,12 +6,16 @@ import {
   updateSession,
   completeSession,
 } from '../controllers/sessionController.js';
+import questionRoutes from './questionRoutes.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // All session routes require authentication
 router.use(protect);
+
+// Mount question routes under a specific session
+router.use('/:id/questions', questionRoutes);
 
 router.route('/').post(createSession).get(getSessions);
 
