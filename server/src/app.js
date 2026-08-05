@@ -28,10 +28,11 @@ app.get('/', (req, res) => {
 });
 
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Setup api routes (will be implemented in later modules)
 app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 // app.use('/api/sessions', sessionRoutes);
 
 // Error Handling Middleware
