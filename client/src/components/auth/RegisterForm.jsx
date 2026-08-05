@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../store/slices/authSlice.js';
 import { Mail, Lock, User, Briefcase, Loader2, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
+import { ROLES } from '../../../../shared/roles.js';
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', targetRole: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', targetRole: ROLES[0].id });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.auth);
@@ -97,21 +98,23 @@ export default function RegisterForm() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-slate-700 block">
-            Target Role <span className="text-slate-400 font-normal">(Optional)</span>
-          </label>
+          <label className="text-sm font-semibold text-slate-700 block">Target Role</label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
               <Briefcase className="w-5 h-5" />
             </div>
-            <input
-              type="text"
+            <select
               name="targetRole"
               value={formData.targetRole}
               onChange={handleChange}
-              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200 outline-none"
-              placeholder="e.g. Software Engineer"
-            />
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200 outline-none appearance-none"
+            >
+              {ROLES.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.title}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
