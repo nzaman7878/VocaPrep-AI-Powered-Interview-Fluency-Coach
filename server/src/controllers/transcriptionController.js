@@ -18,7 +18,5 @@ export const transcribe = asyncHandler(async (req, res) => {
   // Submit to AssemblyAI and poll for results
   const result = await transcribeAudio(audioUrl);
 
-  res.status(200).json(
-    new ApiResponse(200, result, 'Transcription completed successfully')
-  );
+  res.status(200).json(new ApiResponse(200, result, 'Transcription completed successfully'));
 });
