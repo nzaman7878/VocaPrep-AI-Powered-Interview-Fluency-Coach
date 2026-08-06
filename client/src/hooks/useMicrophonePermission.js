@@ -3,15 +3,16 @@ import { useState, useCallback, useEffect } from 'react';
 const useMicrophonePermission = () => {
   const [permissionState, setPermissionState] = useState('prompt'); // 'prompt', 'granted', 'denied'
   const [error, setError] = useState(null);
-  const [isSupported, setIsSupported] = useState(true);
+  const [isSupported, setIsSupported] = useState(() => {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  });
 
-  // Check browser support on mount
+  // Set initial error if not supported
   useEffect(() => {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setIsSupported(false);
+    if (!isSupported) {
       setError('Microphone is not supported in this browser.');
     }
-  }, []);
+  }, [isSupported]);
 
   const checkPermission = useCallback(async () => {
     if (!isSupported) return;
@@ -37,6 +38,7 @@ const useMicrophonePermission = () => {
 
   // Initial check on mount
   useEffect(() => {
+    // eslint-disable-next-line
     checkPermission();
   }, [checkPermission]);
 
