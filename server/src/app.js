@@ -30,11 +30,13 @@ app.get('/', (req, res) => {
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
+import progressRoutes from './routes/progressRoutes.js';
 
 // Setup api routes (will be implemented in later modules)
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
+app.use('/api/progress', progressRoutes);
 
 // Error Handling Middleware
 app.use(notFound);
