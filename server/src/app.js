@@ -31,12 +31,14 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
+import audioRoutes from './routes/audioRoutes.js';
 
 // API Routes Setup
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/audio', audioRoutes);
 
 // Error Handling Middleware
 app.use(notFound);
