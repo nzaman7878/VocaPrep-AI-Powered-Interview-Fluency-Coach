@@ -1,0 +1,66 @@
+@baseUrl = http://localhost:5000/api
+# Replace with a valid token after login
+@token = YOUR_TOKEN_HERE
+
+### Create a new session
+# @name createSession
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "role": "Frontend Developer"
+}
+
+### Get all sessions
+GET {{baseUrl}}/sessions?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Get a single session
+@sessionId = {{createSession.response.body.data._id}}
+GET {{baseUrl}}/sessions/{{sessionId}}
+Authorization: Bearer {{token}}
+
+### Add a question attempt to a session
+POST {{baseUrl}}/sessions/{{sessionId}}/questions
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "questionText": "Explain the virtual DOM.",
+  "questionType": "technical",
+  "transcript": "The virtual DOM is a lightweight copy of the real DOM...",
+  "contentScore": 8,
+  "deliveryMetrics": {
+    "wpm": 130,
+    "fillerRate": 3,
+    "fillerCount": 4,
+    "pauseCount": 2,
+    "avgPauseLength": 1.2,
+    "longestPause": 2.1
+  }
+}
+
+### Update a question attempt
+PUT {{baseUrl}}/sessions/{{sessionId}}/questions/0
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "feedback": "Great explanation, but try to reduce filler words.",
+  "contentFeedback": "Good technical depth.",
+  "deliveryFeedback": "Watch out for 'ums' and 'ahs'."
+}
+
+### Complete a session
+POST {{baseUrl}}/sessions/{{sessionId}}/complete
+Authorization: Bearer {{token}}
+
+### Update a session status (e.g. abandoned)
+PUT {{baseUrl}}/sessions/{{sessionId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "status": "abandoned"
+}

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "AI-Powered Interview & Fluency Coach",
   "private": true,
+  "type": "module",
   "workspaces": [
     "client",
     "server",

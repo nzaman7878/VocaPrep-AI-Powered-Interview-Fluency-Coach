@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:5000/api
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123",
+  "targetRole": "Frontend Developer",
+  "weakAreas": ["React", "System Design"]
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Get Profile (Requires Token)
+@token = {{login.response.body.data.token}}
+
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### Update Profile (Requires Token)
+PUT {{baseUrl}}/users/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "weakAreas": ["React", "CSS"]
+}
+
+### Logout
+POST {{baseUrl}}/auth/logout

@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:5000/api
+# Replace with a valid token after login
+@token = YOUR_TOKEN_HERE
+
+### Get progress snapshots
+GET {{baseUrl}}/progress?limit=30
+Authorization: Bearer {{token}}
+
+### Get progress summary
+GET {{baseUrl}}/progress/summary
+Authorization: Bearer {{token}}
