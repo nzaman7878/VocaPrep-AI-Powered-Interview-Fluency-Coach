@@ -1,6 +1,6 @@
 import { evaluationGraph } from '../ai/evaluationGraph.js';
 import Session from '../models/Session.js';
-import ApiError from '../utils/ApiError.js';
+import { ApiError } from '../utils/ApiError.js';
 
 class EvaluationService {
   /**

@@ -13,7 +13,7 @@ if (!env.GEMINI_API_KEY) {
  */
 export const llm = new ChatGoogleGenerativeAI({
   apiKey: env.GEMINI_API_KEY,
-  modelName: 'gemini-1.5-pro', // 1.5-pro provides excellent reasoning for grading
+  model: 'gemini-1.5-pro', // 1.5-pro provides excellent reasoning for grading
   maxOutputTokens: 2048,
   temperature: 0.2, // Low temperature for consistent, reliable scoring and feedback
 });
