@@ -32,13 +32,13 @@ const QuestionAttemptSchema = new mongoose.Schema({
     longestPause: { type: Number, default: 0 },
   },
   feedback: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
   },
   contentFeedback: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
   },
   deliveryFeedback: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
   },
   answeredAt: {
     type: Date,
