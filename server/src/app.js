@@ -33,6 +33,7 @@ import sessionRoutes from './routes/sessionRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
 import audioRoutes from './routes/audioRoutes.js';
 import transcriptionRoutes from './routes/transcriptionRoutes.js';
+import evaluationRoutes from './routes/evaluationRoutes.js';
 
 // API Routes Setup
 app.use('/api/auth', authRoutes);
@@ -41,6 +42,7 @@ app.use('/api/sessions', sessionRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/api/transcription', transcriptionRoutes);
+app.use('/api/evaluate', evaluationRoutes);
 
 // Error Handling Middleware
 app.use(notFound);
