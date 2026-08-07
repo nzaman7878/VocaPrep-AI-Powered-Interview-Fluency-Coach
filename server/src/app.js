@@ -34,6 +34,7 @@ import progressRoutes from './routes/progressRoutes.js';
 import audioRoutes from './routes/audioRoutes.js';
 import transcriptionRoutes from './routes/transcriptionRoutes.js';
 import evaluationRoutes from './routes/evaluationRoutes.js';
+import questionGenRoutes from './routes/questionGenRoutes.js';
 
 // API Routes Setup
 app.use('/api/auth', authRoutes);
@@ -43,6 +44,7 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/api/transcription', transcriptionRoutes);
 app.use('/api/evaluate', evaluationRoutes);
+app.use('/api/questions', questionGenRoutes);
 
 // Error Handling Middleware
 app.use(notFound);
