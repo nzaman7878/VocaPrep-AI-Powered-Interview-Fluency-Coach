@@ -12,6 +12,7 @@ import { interviewApi } from '../api/interviewApi';
 import { startInterview, completeQuestion } from '../store/slices/interviewSlice';
 import Button from '../components/ui/Button';
 import FeedbackReport from '../components/feedback/FeedbackReport';
+import ProcessingOverlay from '../components/interview/ProcessingOverlay';
 
 // State Machine Steps
 const FLOW_STATES = {
@@ -241,6 +242,8 @@ const InterviewPage = () => {
                 </Button>
               </div>
             </motion.div>
+          ) : isProcessing ? (
+            <ProcessingOverlay key="processing" flowState={flowState} />
           ) : (
             <motion.div
               key="controls"
@@ -258,18 +261,6 @@ const InterviewPage = () => {
                 onResume={resumeRecording}
                 isProcessing={isProcessing}
               />
-
-              {isProcessing && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-6 text-center text-slate-500 font-medium"
-                >
-                  {flowState === FLOW_STATES.UPLOADING && 'Uploading audio securely...'}
-                  {flowState === FLOW_STATES.TRANSCRIBING && 'Transcribing your answer...'}
-                  {flowState === FLOW_STATES.EVALUATING && 'AI evaluating content and delivery...'}
-                </motion.div>
-              )}
             </motion.div>
           )}
         </AnimatePresence>
