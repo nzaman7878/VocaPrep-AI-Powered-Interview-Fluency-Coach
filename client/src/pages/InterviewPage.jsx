@@ -35,6 +35,7 @@ const InterviewPage = () => {
     role,
     questions,
     currentQuestionIndex,
+    status,
   } = useSelector((state) => state.interview);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -80,6 +81,13 @@ const InterviewPage = () => {
 
     fetchSession();
   }, [sessionId, stateSessionId, dispatch, navigate]);
+
+  // Navigate to summary when interview is complete
+  useEffect(() => {
+    if (status === 'completed') {
+      navigate(`/summary/${sessionId}`);
+    }
+  }, [status, navigate, sessionId]);
 
   // Generate the next question using LangGraph pipeline
   const fetchNextQuestion = useCallback(async () => {
