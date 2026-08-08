@@ -90,6 +90,14 @@ const interviewSlice = createSlice({
     resetInterview: () => {
       return initialState;
     },
+
+    /**
+     * Restores the session state from local storage
+     * @param {Object} action.payload - The persisted state object
+     */
+    restoreSession: (state, action) => {
+      return { ...state, ...action.payload };
+    },
   },
 });
 
@@ -100,6 +108,7 @@ export const {
   completeQuestion,
   setError,
   resetInterview,
+  restoreSession,
 } = interviewSlice.actions;
 
 export default interviewSlice.reducer;

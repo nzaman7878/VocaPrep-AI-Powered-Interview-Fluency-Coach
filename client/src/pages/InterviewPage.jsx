@@ -6,7 +6,7 @@ import PageLayout from '../components/layout/PageLayout';
 import QuestionCard from '../components/interview/QuestionCard';
 import RecordingControls from '../components/interview/RecordingControls';
 import useAudioRecorder from '../hooks/useAudioRecorder';
-import { sessionApi } from '../api/sessionApi';
+import useSessionPersistence from '../hooks/useSessionPersistence';
 import { questionApi } from '../api/questionApi';
 import { interviewApi } from '../api/interviewApi';
 import { startInterview, completeQuestion } from '../store/slices/interviewSlice';
@@ -31,6 +31,8 @@ const InterviewPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { isRestoring, error: sessionError } = useSessionPersistence(sessionId);
+
   const {
     sessionId: stateSessionId,
     role,
@@ -39,7 +41,6 @@ const InterviewPage = () => {
     status,
   } = useSelector((state) => state.interview);
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
 
@@ -57,31 +58,12 @@ const InterviewPage = () => {
     resumeRecording,
   } = useAudioRecorder();
 
-  // Hydrate session if accessed directly via URL
+  // Redirect on error
   useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        if (!stateSessionId || stateSessionId !== sessionId) {
-          setIsLoading(true);
-          const response = await sessionApi.getSession(sessionId);
-          dispatch(
-            startInterview({
-              sessionId: response.data._id,
-              role: response.data.role,
-              questions: response.data.questions || [],
-            })
-          );
-        } else {
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Failed to load session:', err);
-        navigate('/role-selection');
-      }
-    };
-
-    fetchSession();
-  }, [sessionId, stateSessionId, dispatch, navigate]);
+    if (sessionError) {
+      navigate('/role-selection');
+    }
+  }, [sessionError, navigate]);
 
   // Navigate to summary when interview is complete
   useEffect(() => {
@@ -117,7 +99,7 @@ const InterviewPage = () => {
 
   // Ensure we have a question generated
   useEffect(() => {
-    if (!isLoading && !isGenerating && !currentQuestionData) {
+    if (!isRestoring && !isGenerating && !currentQuestionData) {
       const existingQuestion = questions[currentQuestionIndex];
       if (existingQuestion && existingQuestion.text) {
         setCurrentQuestionData({
@@ -129,7 +111,7 @@ const InterviewPage = () => {
       }
     }
   }, [
-    isLoading,
+    isRestoring,
     isGenerating,
     currentQuestionData,
     currentQuestionIndex,
@@ -188,7 +170,7 @@ const InterviewPage = () => {
     setEvaluationResult(null);
   };
 
-  if (isLoading) {
+  if (isRestoring) {
     return (
       <PageLayout>
         <div className="flex items-center justify-center min-h-[60vh]">
