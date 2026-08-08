@@ -10,4 +10,9 @@ export const sessionApi = {
     const response = await axiosClient.get(`/sessions/${sessionId}`);
     return response.data;
   },
+
+  getSessions: async (params = {}) => {
+    const response = await axiosClient.get('/sessions', { params });
+    return response.data;
+  },
 };

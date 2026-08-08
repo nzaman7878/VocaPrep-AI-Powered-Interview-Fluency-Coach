@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import RoleSelectionPage from './pages/RoleSelectionPage';
 import InterviewPage from './pages/InterviewPage';
 import SessionSummaryPage from './pages/SessionSummaryPage';
+import DashboardPage from './pages/DashboardPage';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 
 function App() {
@@ -18,10 +19,7 @@ function App() {
           <Route path="/role-selection" element={<RoleSelectionPage />} />
           <Route path="/interview/:sessionId" element={<InterviewPage />} />
           <Route path="/summary/:sessionId" element={<SessionSummaryPage />} />
-          <Route
-            path="/dashboard"
-            element={<div className="p-8 text-2xl font-bold">Dashboard (Coming soon)</div>}
-          />
+          <Route path="/dashboard" element={<DashboardPage />} />
         </Routes>
       </Router>
     </ErrorBoundary>
