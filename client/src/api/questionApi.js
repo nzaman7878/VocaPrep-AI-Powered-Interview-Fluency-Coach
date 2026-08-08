@@ -9,4 +9,10 @@ export const questionApi = {
     });
     return response.data; // { data: { questionText: '...' } }
   },
+
+  addQuestionAttempt: async (sessionId, data) => {
+    // data: { questionText, questionType, audioUrl, transcript }
+    const response = await axiosClient.post(`/sessions/${sessionId}/questions`, data);
+    return response.data;
+  },
 };

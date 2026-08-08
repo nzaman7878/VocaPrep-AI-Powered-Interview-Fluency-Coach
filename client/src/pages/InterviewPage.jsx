@@ -1,13 +1,28 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PageLayout from '../components/layout/PageLayout';
 import QuestionCard from '../components/interview/QuestionCard';
+import RecordingControls from '../components/interview/RecordingControls';
+import useAudioRecorder from '../hooks/useAudioRecorder';
 import { sessionApi } from '../api/sessionApi';
 import { questionApi } from '../api/questionApi';
-import { startInterview, setAttemptData } from '../store/slices/interviewSlice';
+import { uploadAudio } from '../api/audioApi';
+import { transcribeAudio } from '../api/transcriptionApi';
+import { evaluationApi } from '../api/evaluationApi';
+import { startInterview, completeQuestion } from '../store/slices/interviewSlice';
 import Button from '../components/ui/Button';
+
+// State Machine Steps
+const FLOW_STATES = {
+  IDLE: 'IDLE',
+  RECORDING: 'RECORDING',
+  UPLOADING: 'UPLOADING',
+  TRANSCRIBING: 'TRANSCRIBING',
+  EVALUATING: 'EVALUATING',
+  SHOWING_FEEDBACK: 'SHOWING_FEEDBACK',
+};
 
 const InterviewPage = () => {
   const { sessionId } = useParams();
@@ -19,14 +34,27 @@ const InterviewPage = () => {
     role,
     questions,
     currentQuestionIndex,
-    status,
   } = useSelector((state) => state.interview);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [currentQuestionData, setCurrentQuestionData] = useState(null);
 
-  // Hydrate state if arriving directly via URL
+  const [flowState, setFlowState] = useState(FLOW_STATES.IDLE);
+  const [evaluationResult, setEvaluationResult] = useState(null);
+
+  const {
+    isRecording,
+    isPaused,
+    recordingTime,
+    audioBlob,
+    startRecording,
+    stopRecording,
+    pauseRecording,
+    resumeRecording,
+  } = useAudioRecorder();
+
+  // Hydrate session if accessed directly via URL
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -52,7 +80,7 @@ const InterviewPage = () => {
     fetchSession();
   }, [sessionId, stateSessionId, dispatch, navigate]);
 
-  // Handle Question Generation
+  // Generate the next question using LangGraph pipeline
   const fetchNextQuestion = useCallback(async () => {
     if (!sessionId || !role || isGenerating) return;
 
@@ -77,10 +105,9 @@ const InterviewPage = () => {
     }
   }, [sessionId, role, currentQuestionIndex, isGenerating]);
 
+  // Ensure we have a question generated
   useEffect(() => {
-    // If we've loaded the session and don't have the question loaded yet, generate it
     if (!isLoading && !isGenerating && !currentQuestionData) {
-      // Check if it already exists in the backend questions array
       const existingQuestion = questions[currentQuestionIndex];
       if (existingQuestion && existingQuestion.text) {
         setCurrentQuestionData({
@@ -100,9 +127,77 @@ const InterviewPage = () => {
     fetchNextQuestion,
   ]);
 
+  // Handle start recording
+  const handleStartRecording = () => {
+    setFlowState(FLOW_STATES.RECORDING);
+    startRecording();
+  };
+
+  // Handle auto-stop on time up
   const handleTimeUp = () => {
-    console.log('Time is up for this question!');
-    // Later we will trigger auto-recording stop here
+    if (isRecording) {
+      stopRecording();
+    }
+  };
+
+  // Main Processing Pipeline (Upload -> Transcribe -> Evaluate)
+  useEffect(() => {
+    const processAudio = async () => {
+      if (!audioBlob || flowState !== FLOW_STATES.RECORDING) return;
+
+      try {
+        // 1. Upload Audio
+        setFlowState(FLOW_STATES.UPLOADING);
+        const uploadResult = await uploadAudio(audioBlob, (progressEvent) => {
+          // progress tracking could go here
+        });
+
+        // 2. Transcribe Audio via AssemblyAI
+        setFlowState(FLOW_STATES.TRANSCRIBING);
+        const transcriptionResult = await transcribeAudio(uploadResult.secure_url);
+
+        // 3. Save Attempt to Database
+        // We must do this *before* evaluation to get an attempt ID
+        const attemptResponse = await questionApi.addQuestionAttempt(sessionId, {
+          questionText: currentQuestionData.text,
+          questionType: currentQuestionData.type,
+          transcript: transcriptionResult.text,
+          audioUrl: uploadResult.secure_url,
+        });
+
+        const attemptId = attemptResponse.data._id;
+
+        // 4. Run LangGraph Evaluation Pipeline
+        setFlowState(FLOW_STATES.EVALUATING);
+        const evalResponse = await evaluationApi.evaluateAnswer(
+          sessionId,
+          attemptId,
+          transcriptionResult.text,
+          transcriptionResult.words
+        );
+
+        setEvaluationResult({
+          transcript: transcriptionResult.text,
+          ...evalResponse.data,
+        });
+
+        // 5. Complete
+        setFlowState(FLOW_STATES.SHOWING_FEEDBACK);
+      } catch (err) {
+        console.error('Pipeline error:', err);
+        alert('Something went wrong during processing. Please try again.');
+        setFlowState(FLOW_STATES.IDLE);
+      }
+    };
+
+    processAudio();
+  }, [audioBlob, flowState, sessionId, currentQuestionData]);
+
+  const handleNextQuestion = () => {
+    dispatch(completeQuestion());
+    setFlowState(FLOW_STATES.IDLE);
+    setCurrentQuestionData(null); // will trigger fetchNextQuestion
+    setEvaluationResult(null);
   };
 
   if (isLoading) {
@@ -115,6 +210,12 @@ const InterviewPage = () => {
     );
   }
 
+  const isProcessing = [
+    FLOW_STATES.UPLOADING,
+    FLOW_STATES.TRANSCRIBING,
+    FLOW_STATES.EVALUATING,
+  ].includes(flowState);
+
   return (
     <PageLayout>
       <div className="max-w-5xl mx-auto px-6 py-8">
@@ -122,45 +223,77 @@ const InterviewPage = () => {
           <QuestionCard
             question={currentQuestionData}
             index={currentQuestionIndex}
-            total={Math.max(questions.length, 5)} // default 5 if not loaded
-            isActive={status !== 'processing' && status !== 'completed'}
+            total={Math.max(questions.length, 5)}
+            isActive={flowState === FLOW_STATES.RECORDING}
             isLoading={isGenerating}
             onTimeUp={handleTimeUp}
           />
         </div>
 
-        {/* Temporary Placeholder for Recording Controls (Module 81/82) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-100/50 flex flex-col items-center justify-center min-h-[300px]"
-        >
-          <div className="text-slate-400 text-center mb-6">
-            <svg
-              className="w-16 h-16 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <AnimatePresence mode="wait">
+          {flowState === FLOW_STATES.SHOWING_FEEDBACK ? (
+            <motion.div
+              key="feedback"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-100/50"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-              />
-            </svg>
-            <h3 className="text-xl font-bold text-slate-700 mb-2 font-display">
-              Audio Recording Component
-            </h3>
-            <p>Will be implemented in the next modules.</p>
-          </div>
+              <h3 className="text-2xl font-bold text-slate-800 mb-4 font-display">
+                Analysis Complete
+              </h3>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
+                <p className="text-slate-600 font-medium mb-2">Transcript:</p>
+                <p className="text-slate-800 leading-relaxed italic">
+                  "{evaluationResult?.transcript}"
+                </p>
+              </div>
 
-          {/* Temporary skip button just to test flow */}
-          <Button variant="secondary" onClick={fetchNextQuestion} disabled={isGenerating}>
-            Simulate Next Question
-          </Button>
-        </motion.div>
+              <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-8">
+                <h4 className="font-bold text-indigo-900 mb-2">Actionable Tip:</h4>
+                <p className="text-indigo-800">
+                  {evaluationResult?.coachingReport?.actionableTip || 'Great job!'}
+                </p>
+              </div>
+
+              <div className="flex justify-end">
+                <Button size="lg" onClick={handleNextQuestion}>
+                  Next Question
+                </Button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="controls"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <RecordingControls
+                isRecording={isRecording}
+                isPaused={isPaused}
+                recordingTime={recordingTime}
+                onStart={handleStartRecording}
+                onStop={stopRecording}
+                onPause={pauseRecording}
+                onResume={resumeRecording}
+                isProcessing={isProcessing}
+              />
+
+              {isProcessing && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-6 text-center text-slate-500 font-medium"
+                >
+                  {flowState === FLOW_STATES.UPLOADING && 'Uploading audio securely...'}
+                  {flowState === FLOW_STATES.TRANSCRIBING && 'Transcribing your answer...'}
+                  {flowState === FLOW_STATES.EVALUATING && 'AI evaluating content and delivery...'}
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </PageLayout>
   );
