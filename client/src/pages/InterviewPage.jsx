@@ -13,6 +13,7 @@ import { transcribeAudio } from '../api/transcriptionApi';
 import { evaluationApi } from '../api/evaluationApi';
 import { startInterview, completeQuestion } from '../store/slices/interviewSlice';
 import Button from '../components/ui/Button';
+import FeedbackReport from '../components/feedback/FeedbackReport';
 
 // State Machine Steps
 const FLOW_STATES = {
@@ -237,28 +238,26 @@ const InterviewPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-100/50"
+              className="flex flex-col gap-6"
             >
-              <h3 className="text-2xl font-bold text-slate-800 mb-4 font-display">
-                Analysis Complete
-              </h3>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
-                <p className="text-slate-600 font-medium mb-2">Transcript:</p>
-                <p className="text-slate-800 leading-relaxed italic">
+              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl shadow-slate-100/50">
+                <h3 className="text-xl font-bold text-slate-800 mb-2 font-display">
+                  Your Transcript
+                </h3>
+                <p className="text-slate-600 leading-relaxed italic">
                   "{evaluationResult?.transcript}"
                 </p>
               </div>
 
-              <div className="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-8">
-                <h4 className="font-bold text-indigo-900 mb-2">Actionable Tip:</h4>
-                <p className="text-indigo-800">
-                  {evaluationResult?.coachingReport?.actionableTip || 'Great job!'}
-                </p>
-              </div>
+              <FeedbackReport evaluationResult={evaluationResult} />
 
-              <div className="flex justify-end">
-                <Button size="lg" onClick={handleNextQuestion}>
-                  Next Question
+              <div className="flex justify-end mt-2">
+                <Button
+                  size="lg"
+                  onClick={handleNextQuestion}
+                  className="shadow-lg shadow-indigo-200"
+                >
+                  Continue to Next Question
                 </Button>
               </div>
             </motion.div>
