@@ -13,6 +13,7 @@ import { startInterview, completeQuestion } from '../store/slices/interviewSlice
 import Button from '../components/ui/Button';
 import FeedbackReport from '../components/feedback/FeedbackReport';
 import ProcessingOverlay from '../components/interview/ProcessingOverlay';
+import ErrorMessage from '../components/ui/ErrorMessage';
 
 // State Machine Steps
 const FLOW_STATES = {
@@ -22,6 +23,7 @@ const FLOW_STATES = {
   TRANSCRIBING: 'TRANSCRIBING',
   EVALUATING: 'EVALUATING',
   SHOWING_FEEDBACK: 'SHOWING_FEEDBACK',
+  ERROR: 'ERROR',
 };
 
 const InterviewPage = () => {
@@ -167,13 +169,17 @@ const InterviewPage = () => {
         setFlowState(FLOW_STATES.SHOWING_FEEDBACK);
       } catch (err) {
         console.error('Pipeline error:', err);
-        alert('Something went wrong during processing. Please try again.');
-        setFlowState(FLOW_STATES.IDLE);
+        setFlowState(FLOW_STATES.ERROR);
       }
     };
 
     processAudio();
   }, [audioBlob, flowState, sessionId, currentQuestionData]);
+
+  const handleRetryProcessing = () => {
+    // Re-trigger the processing pipeline
+    setFlowState(FLOW_STATES.RECORDING);
+  };
 
   const handleNextQuestion = () => {
     dispatch(completeQuestion());
@@ -241,6 +247,20 @@ const InterviewPage = () => {
                   Continue to Next Question
                 </Button>
               </div>
+            </motion.div>
+          ) : flowState === FLOW_STATES.ERROR ? (
+            <motion.div
+              key="error"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="py-12"
+            >
+              <ErrorMessage
+                title="Processing Failed"
+                message="We encountered an issue while analyzing your answer. Please try processing it again."
+                onRetry={handleRetryProcessing}
+              />
             </motion.div>
           ) : isProcessing ? (
             <ProcessingOverlay key="processing" flowState={flowState} />

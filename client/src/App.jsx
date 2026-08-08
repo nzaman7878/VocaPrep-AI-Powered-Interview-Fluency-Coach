@@ -5,23 +5,26 @@ import RegisterPage from './pages/RegisterPage';
 import RoleSelectionPage from './pages/RoleSelectionPage';
 import InterviewPage from './pages/InterviewPage';
 import SessionSummaryPage from './pages/SessionSummaryPage';
+import ErrorBoundary from './components/ui/ErrorBoundary';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/role-selection" element={<RoleSelectionPage />} />
-        <Route path="/interview/:sessionId" element={<InterviewPage />} />
-        <Route path="/summary/:sessionId" element={<SessionSummaryPage />} />
-        <Route
-          path="/dashboard"
-          element={<div className="p-8 text-2xl font-bold">Dashboard (Coming soon)</div>}
-        />
-      </Routes>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/role-selection" element={<RoleSelectionPage />} />
+          <Route path="/interview/:sessionId" element={<InterviewPage />} />
+          <Route path="/summary/:sessionId" element={<SessionSummaryPage />} />
+          <Route
+            path="/dashboard"
+            element={<div className="p-8 text-2xl font-bold">Dashboard (Coming soon)</div>}
+          />
+        </Routes>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
