@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import PageLayout from '../components/layout/PageLayout';
@@ -28,11 +28,7 @@ const DashboardPage = () => {
   const [sessions, setSessions] = useState([]);
 
   // Fetch data
-  const {
-    execute: fetchDashboardData,
-    error: retryError,
-    isLoading: isFetching,
-  } = useRetry(async () => {
+  const fetchDataFn = useCallback(async () => {
     dispatch(setProgressLoading());
 
     const [summaryData, snapshotsData, sessionsData] = await Promise.all([
@@ -69,7 +65,13 @@ const DashboardPage = () => {
     });
 
     setSessions(enrichedSessions);
-  });
+  }, [dispatch]);
+
+  const {
+    execute: fetchDashboardData,
+    error: retryError,
+    isLoading: isFetching,
+  } = useRetry(fetchDataFn);
 
   useEffect(() => {
     if (!user) {
