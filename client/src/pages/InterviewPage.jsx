@@ -8,9 +8,7 @@ import RecordingControls from '../components/interview/RecordingControls';
 import useAudioRecorder from '../hooks/useAudioRecorder';
 import { sessionApi } from '../api/sessionApi';
 import { questionApi } from '../api/questionApi';
-import { uploadAudio } from '../api/audioApi';
-import { transcribeAudio } from '../api/transcriptionApi';
-import { evaluationApi } from '../api/evaluationApi';
+import { interviewApi } from '../api/interviewApi';
 import { startInterview, completeQuestion } from '../store/slices/interviewSlice';
 import Button from '../components/ui/Button';
 import FeedbackReport from '../components/feedback/FeedbackReport';
@@ -155,40 +153,14 @@ const InterviewPage = () => {
       if (!audioBlob || flowState !== FLOW_STATES.RECORDING) return;
 
       try {
-        // 1. Upload Audio
-        setFlowState(FLOW_STATES.UPLOADING);
-        const uploadResult = await uploadAudio(audioBlob, (progressEvent) => {
-          // progress tracking could go here
-        });
-
-        // 2. Transcribe Audio via AssemblyAI
-        setFlowState(FLOW_STATES.TRANSCRIBING);
-        const transcriptionResult = await transcribeAudio(uploadResult.secure_url);
-
-        // 3. Save Attempt to Database
-        // We must do this *before* evaluation to get an attempt ID
-        const attemptResponse = await questionApi.addQuestionAttempt(sessionId, {
-          questionText: currentQuestionData.text,
-          questionType: currentQuestionData.type,
-          transcript: transcriptionResult.text,
-          audioUrl: uploadResult.secure_url,
-        });
-
-        const attemptId = attemptResponse.data._id;
-
-        // 4. Run LangGraph Evaluation Pipeline
-        setFlowState(FLOW_STATES.EVALUATING);
-        const evalResponse = await evaluationApi.evaluateAnswer(
+        const finalEvaluation = await interviewApi.processAnswerPipeline(
           sessionId,
-          attemptId,
-          transcriptionResult.text,
-          transcriptionResult.words
+          audioBlob,
+          currentQuestionData,
+          (stepState) => setFlowState(FLOW_STATES[stepState])
         );
 
-        setEvaluationResult({
-          transcript: transcriptionResult.text,
-          ...evalResponse.data,
-        });
+        setEvaluationResult(finalEvaluation);
 
         // 5. Complete
         setFlowState(FLOW_STATES.SHOWING_FEEDBACK);
