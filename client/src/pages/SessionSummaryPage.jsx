@@ -53,31 +53,34 @@ const SessionSummaryPage = () => {
   }
 
   // Calculate aggregates
-  const completedQuestions = session.questions.filter(
-    (q) => q.transcript && q.contentScore !== undefined
-  );
-  const totalQuestions = completedQuestions.length;
+  const stats = React.useMemo(() => {
+    const completedQuestions = session.questions.filter(
+      (q) => q.transcript && q.contentScore !== undefined
+    );
+    const totalQuestions = completedQuestions.length;
 
-  const avgContentScore =
-    totalQuestions > 0
-      ? completedQuestions.reduce((acc, q) => acc + (q.contentScore || 0), 0) / totalQuestions
-      : 0;
+    const avgContentScore =
+      totalQuestions > 0
+        ? completedQuestions.reduce((acc, q) => acc + (q.contentScore || 0), 0) / totalQuestions
+        : 0;
 
-  const avgWpm =
-    totalQuestions > 0
-      ? completedQuestions.reduce((acc, q) => acc + (q.deliveryMetrics?.wpm || 0), 0) /
-        totalQuestions
-      : 0;
+    const avgWpm =
+      totalQuestions > 0
+        ? completedQuestions.reduce((acc, q) => acc + (q.deliveryMetrics?.wpm || 0), 0) /
+          totalQuestions
+        : 0;
 
-  // Rough estimation of duration (assuming ~2 mins per question recorded)
-  const durationMinutes = totalQuestions * 2;
+    // Rough estimation of duration (assuming ~2 mins per question recorded)
+    const durationMinutes = totalQuestions * 2;
 
-  const stats = {
-    avgContentScore,
-    avgWpm,
-    totalQuestions,
-    durationMinutes,
-  };
+    return {
+      completedQuestions,
+      avgContentScore,
+      avgWpm,
+      totalQuestions,
+      durationMinutes,
+    };
+  }, [session]);
 
   return (
     <PageLayout>
@@ -110,7 +113,7 @@ const SessionSummaryPage = () => {
             Detailed Question Analysis
           </h2>
 
-          {completedQuestions.map((q, index) => (
+          {stats.completedQuestions.map((q, index) => (
             <motion.div
               key={q._id || index}
               initial={{ opacity: 0, y: 20 }}
@@ -142,7 +145,7 @@ const SessionSummaryPage = () => {
             </motion.div>
           ))}
 
-          {completedQuestions.length === 0 && (
+          {stats.completedQuestions.length === 0 && (
             <div className="text-center py-10 bg-slate-50 rounded-2xl border border-slate-200">
               <p className="text-slate-500 font-medium">
                 No completed questions found for this session.

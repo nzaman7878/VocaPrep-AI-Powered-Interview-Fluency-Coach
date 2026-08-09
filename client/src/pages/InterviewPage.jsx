@@ -120,17 +120,17 @@ const InterviewPage = () => {
   ]);
 
   // Handle start recording
-  const handleStartRecording = () => {
+  const handleStartRecording = useCallback(() => {
     setFlowState(FLOW_STATES.RECORDING);
     startRecording();
-  };
+  }, [startRecording]);
 
   // Handle auto-stop on time up
-  const handleTimeUp = () => {
+  const handleTimeUp = useCallback(() => {
     if (isRecording) {
       stopRecording();
     }
-  };
+  }, [isRecording, stopRecording]);
 
   // Main Processing Pipeline (Upload -> Transcribe -> Evaluate)
   useEffect(() => {
@@ -158,17 +158,17 @@ const InterviewPage = () => {
     processAudio();
   }, [audioBlob, flowState, sessionId, currentQuestionData]);
 
-  const handleRetryProcessing = () => {
+  const handleRetryProcessing = useCallback(() => {
     // Re-trigger the processing pipeline
     setFlowState(FLOW_STATES.RECORDING);
-  };
+  }, []);
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(() => {
     dispatch(completeQuestion());
     setFlowState(FLOW_STATES.IDLE);
     setCurrentQuestionData(null); // will trigger fetchNextQuestion
     setEvaluationResult(null);
-  };
+  }, [dispatch]);
 
   if (isRestoring) {
     return (

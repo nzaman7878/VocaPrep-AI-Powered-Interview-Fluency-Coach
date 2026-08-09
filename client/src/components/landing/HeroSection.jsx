@@ -4,15 +4,18 @@ import Button from '../ui/Button';
 import { Mic } from 'lucide-react';
 
 export const HeroSection = () => {
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
   const containerRef = useRef(null);
+  const blobRef = useRef(null);
 
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !blobRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
+
+    // Update DOM directly to avoid React state re-renders on every pixel move
+    blobRef.current.style.left = `${x}%`;
+    blobRef.current.style.top = `${y}%`;
   };
 
   return (
@@ -23,10 +26,11 @@ export const HeroSection = () => {
     >
       {/* Dynamic Cursor Blob */}
       <div
-        className="absolute w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none transition-all duration-300 ease-out"
+        ref={blobRef}
+        className="absolute w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none transition-transform duration-100 ease-out"
         style={{
-          left: `${mousePos.x}%`,
-          top: `${mousePos.y}%`,
+          left: '50%',
+          top: '50%',
           transform: 'translate(-50%, -50%)',
         }}
       />

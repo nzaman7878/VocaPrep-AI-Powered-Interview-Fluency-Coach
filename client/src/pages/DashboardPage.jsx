@@ -106,10 +106,13 @@ const DashboardPage = () => {
     );
   }
 
-  const bestScore = history.length > 0 ? Math.max(...history.map((h) => h.contentScore)) : 0;
+  const bestScore = React.useMemo(() => {
+    return history.length > 0 ? Math.max(...history.map((h) => h.contentScore)) : 0;
+  }, [history]);
 
-  const avgWpm =
-    history.length > 0 ? history.reduce((sum, h) => sum + h.wpm, 0) / history.length : 0;
+  const avgWpm = React.useMemo(() => {
+    return history.length > 0 ? history.reduce((sum, h) => sum + h.wpm, 0) / history.length : 0;
+  }, [history]);
 
   return (
     <PageLayout>
