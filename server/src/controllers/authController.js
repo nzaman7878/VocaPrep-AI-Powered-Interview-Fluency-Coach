@@ -97,3 +97,43 @@ export const loginUser = asyncHandler(async (req, res) => {
     )
   );
 });
+
+/**
+ * @desc    Refresh token
+ * @route   POST /api/auth/refresh
+ * @access  Public
+ */
+export const refreshToken = asyncHandler(async (req, res) => {
+  const { refreshToken: token } = req.body;
+
+  if (!token) {
+    throw new ApiError(400, 'Refresh token is required');
+  }
+
+  try {
+    const { verifyToken } = await import('../services/tokenService.js');
+    const decoded = verifyToken(token);
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      throw new ApiError(401, 'Invalid refresh token');
+    }
+
+    const { generateAuthTokens } = await import('../services/tokenService.js');
+    const tokens = generateAuthTokens(user);
+
+    res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+        },
+        'Token refreshed successfully'
+      )
+    );
+  } catch (error) {
+    throw new ApiError(401, 'Invalid or expired refresh token');
+  }
+});

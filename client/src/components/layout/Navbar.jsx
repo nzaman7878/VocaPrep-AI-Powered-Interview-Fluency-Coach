@@ -40,18 +40,18 @@ export const Navbar = () => {
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
-          <a
-            href="/#features"
+          <Link
+            to="/#features"
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             Features
-          </a>
-          <a
-            href="/#how-it-works"
+          </Link>
+          <Link
+            to="/#how-it-works"
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             How it Works
-          </a>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -62,6 +62,12 @@ export const Navbar = () => {
                 className="text-sm font-medium text-text-primary hover:text-primary transition-colors"
               >
                 Dashboard
+              </Link>
+              <Link
+                to="/role-selection"
+                className="text-sm font-medium text-text-primary hover:text-primary transition-colors"
+              >
+                Start Interview
               </Link>
               <div className="h-4 w-px bg-surface-elevated" />
               <div className="flex items-center gap-3">

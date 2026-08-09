@@ -1,6 +1,22 @@
+import React, { useEffect } from 'react';
 import RegisterForm from '../components/auth/RegisterForm.jsx';
+import { Navigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { clearError } from '../store/slices/authSlice';
 
 export default function RegisterPage() {
+  const { user } = useSelector((state) => state.auth);
+  const token = localStorage.getItem('accessToken');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  if (user || token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-100 via-slate-50 to-slate-100 p-4 relative overflow-hidden">
       {/* Decorative background blobs */}

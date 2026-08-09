@@ -26,14 +26,14 @@ export const interviewApi = {
 
     // 2. Transcribe
     onProgress('TRANSCRIBING');
-    const transcriptionResult = await transcribeAudio(uploadResult.secure_url);
+    const transcriptionResult = await transcribeAudio(uploadResult.url);
 
     // 3. Save Question Attempt to DB (Generates an Attempt ID)
     const attemptResponse = await questionApi.addQuestionAttempt(sessionId, {
       questionText: currentQuestionData.text,
       questionType: currentQuestionData.type,
       transcript: transcriptionResult.text,
-      audioUrl: uploadResult.secure_url,
+      audioUrl: uploadResult.url,
     });
 
     const attemptId = attemptResponse.data._id;
