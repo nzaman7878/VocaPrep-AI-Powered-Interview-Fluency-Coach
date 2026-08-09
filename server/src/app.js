@@ -2,8 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import hpp from 'hpp';
 import { env } from './config/env.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import { globalLimiter, authLimiter, aiLimiter } from './middleware/rateLimiter.js';
 
 const app = express();
 
@@ -15,8 +19,21 @@ app.use(
     credentials: true,
   })
 ); // CORS
-app.use(express.json()); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+// Apply global rate limiting
+app.use('/api', globalLimiter);
+
+app.use(express.json({ limit: '10mb' })); // Parse JSON bodies with a limit
+app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
+// Prevent HTTP Parameter Pollution
+app.use(hpp());
 
 if (env.NODE_ENV === 'development') {
   app.use(morgan('dev')); // HTTP request logger
@@ -37,14 +54,14 @@ import evaluationRoutes from './routes/evaluationRoutes.js';
 import questionGenRoutes from './routes/questionGenRoutes.js';
 
 // API Routes Setup
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes); // Stricter limit on auth routes
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/api/transcription', transcriptionRoutes);
-app.use('/api/evaluate', evaluationRoutes);
-app.use('/api/questions', questionGenRoutes);
+app.use('/api/evaluate', aiLimiter, evaluationRoutes); // Stricter limit on expensive AI evaluation
+app.use('/api/questions', aiLimiter, questionGenRoutes); // Stricter limit on AI question generation
 
 // Error Handling Middleware
 app.use(notFound);
