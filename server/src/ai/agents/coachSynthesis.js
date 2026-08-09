@@ -33,12 +33,7 @@ export const synthesizeCoachingNode = async (state) => {
     };
   }
 
-  // Force JSON response from Gemini
-  const modelWithStructuredOutput = llm.bind({
-    response_mime_type: 'application/json',
-  });
-
-  const chain = coachSynthesisPrompt.pipe(modelWithStructuredOutput);
+  const chain = coachSynthesisPrompt.pipe(llm);
 
   const response = await chain.invoke({
     contentScore: contentEvaluation.score,
