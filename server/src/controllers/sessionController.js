@@ -3,6 +3,7 @@ import ProgressSnapshot from '../models/ProgressSnapshot.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
+import { embeddingService } from '../services/embeddingService.js';
 
 /**
  * @desc    Create a new interview session
@@ -146,6 +147,13 @@ export const completeSession = asyncHandler(async (req, res) => {
       avgFillerRate: totals.fillerRate / totalQuestions,
       avgContentScore: totals.contentScore / totalQuestions,
     });
+
+    // Fire and forget auto-embedding for RAG personalization
+    Promise.all(
+      session.questions
+        .filter((q) => q.status === 'completed')
+        .map((q) => embeddingService.embedQuestionAttempt(session, q))
+    ).catch((err) => console.error('Failed to embed session questions:', err));
   }
 
   res.status(200).json(new ApiResponse(200, session, 'Session completed successfully'));
