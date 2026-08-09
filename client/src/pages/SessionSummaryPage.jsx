@@ -7,8 +7,11 @@ import FeedbackReport from '../components/feedback/FeedbackReport';
 import { sessionApi } from '../api/sessionApi';
 import Button from '../components/ui/Button';
 import { ArrowLeft } from 'lucide-react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const SessionSummaryPage = () => {
+  useDocumentTitle('Session Summary');
+
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [session, setSession] = useState(null);

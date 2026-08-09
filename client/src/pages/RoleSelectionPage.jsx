@@ -8,6 +8,7 @@ import Button from '../components/ui/Button';
 import PageLayout from '../components/layout/PageLayout';
 import { sessionApi } from '../api/sessionApi';
 import { startInterview } from '../store/slices/interviewSlice';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -23,6 +24,8 @@ const itemVariants = {
 };
 
 const RoleSelectionPage = () => {
+  useDocumentTitle('Select Your Role');
+
   const [selectedRole, setSelectedRole] = useState(null);
   const [questionCount, setQuestionCount] = useState(5);
   const [isStarting, setIsStarting] = useState(false);

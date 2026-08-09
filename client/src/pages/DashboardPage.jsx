@@ -17,8 +17,11 @@ import {
 } from '../store/slices/progressSlice';
 import useRetry from '../hooks/useRetry';
 import ErrorMessage from '../components/ui/ErrorMessage';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const DashboardPage = () => {
+  useDocumentTitle('Progress Dashboard');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);

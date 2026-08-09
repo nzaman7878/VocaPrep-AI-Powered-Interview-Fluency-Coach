@@ -14,6 +14,7 @@ import Button from '../components/ui/Button';
 import FeedbackReport from '../components/feedback/FeedbackReport';
 import ProcessingOverlay from '../components/interview/ProcessingOverlay';
 import ErrorMessage from '../components/ui/ErrorMessage';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 // State Machine Steps
 const FLOW_STATES = {
@@ -27,6 +28,8 @@ const FLOW_STATES = {
 };
 
 const InterviewPage = () => {
+  useDocumentTitle('Interview Session');
+
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
