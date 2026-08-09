@@ -21,7 +21,7 @@ export const createSession = asyncHandler(async (req, res) => {
     userId: req.user.id,
     role,
     status: 'in_progress',
-    totalQuestions: 0,
+    totalQuestions: req.body.totalQuestions || 5,
     questions: [],
   });
 

@@ -32,6 +32,7 @@ const interviewSlice = createSlice({
       state.sessionId = action.payload.sessionId;
       state.role = action.payload.role;
       state.questions = action.payload.questions || [];
+      state.totalQuestions = action.payload.totalQuestions || 5;
       state.currentQuestionIndex = 0;
       state.status = 'idle';
       state.attempts = [];
@@ -66,7 +67,7 @@ const interviewSlice = createSlice({
       state.attempts[state.currentQuestionIndex] = { ...state.currentAttempt };
 
       // Move to next question if available
-      if (state.currentQuestionIndex < state.questions.length - 1) {
+      if (state.currentQuestionIndex < (state.totalQuestions || 5) - 1) {
         state.currentQuestionIndex += 1;
         state.currentAttempt = { ...initialState.currentAttempt };
         state.status = 'idle';

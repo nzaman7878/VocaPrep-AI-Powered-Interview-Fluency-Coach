@@ -40,6 +40,7 @@ const InterviewPage = () => {
     sessionId: stateSessionId,
     role,
     questions,
+    totalQuestions,
     currentQuestionIndex,
     status,
   } = useSelector((state) => state.interview);
@@ -166,12 +167,24 @@ const InterviewPage = () => {
     setFlowState(FLOW_STATES.RECORDING);
   }, []);
 
-  const handleNextQuestion = useCallback(() => {
+  const handleNextQuestion = useCallback(async () => {
+    const isLastQuestion = currentQuestionIndex >= (totalQuestions || 5) - 1;
+
     dispatch(completeQuestion());
-    setFlowState(FLOW_STATES.IDLE);
-    setCurrentQuestionData(null); // will trigger fetchNextQuestion
-    setEvaluationResult(null);
-  }, [dispatch]);
+
+    if (isLastQuestion) {
+      try {
+        // Must notify backend to finalize the session and generate the ProgressSnapshot
+        await sessionApi.completeSession(sessionId);
+      } catch (err) {
+        console.error('Failed to complete session on backend:', err);
+      }
+    } else {
+      setFlowState(FLOW_STATES.IDLE);
+      setCurrentQuestionData(null); // will trigger fetchNextQuestion
+      setEvaluationResult(null);
+    }
+  }, [dispatch, currentQuestionIndex, totalQuestions, sessionId]);
 
   if (isRestoring) {
     return (
@@ -196,7 +209,7 @@ const InterviewPage = () => {
           <QuestionCard
             question={currentQuestionData}
             index={currentQuestionIndex}
-            total={Math.max(questions.length, 5)}
+            total={totalQuestions || 5}
             isActive={flowState === FLOW_STATES.RECORDING}
             isLoading={isGenerating}
             onTimeUp={handleTimeUp}
