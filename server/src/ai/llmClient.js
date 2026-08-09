@@ -13,7 +13,7 @@ if (!env.GEMINI_API_KEY) {
  */
 export const llm = new ChatGoogleGenerativeAI({
   apiKey: env.GEMINI_API_KEY,
-  model: 'gemini-3.6-flash', // 3.6-flash provides excellent reasoning for grading
+  model: 'gemini-3.5-flash',
   maxOutputTokens: 2048,
   temperature: 0.2, // Low temperature for consistent, reliable scoring and feedback
 });

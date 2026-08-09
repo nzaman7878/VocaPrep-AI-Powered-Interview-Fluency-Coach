@@ -29,7 +29,7 @@ export const detectFillers = (words = []) => {
   let i = 0;
 
   // Pre-clean words for easier matching (lowercase, strip punctuation)
-  const cleanWords = words.map((w) => w.text.toLowerCase().replace(/[.,!?]/g, ''));
+  const cleanWords = words.map((w) => (w.text || '').toLowerCase().replace(/[.,!?]/g, ''));
 
   while (i < cleanWords.length) {
     let matched = false;
