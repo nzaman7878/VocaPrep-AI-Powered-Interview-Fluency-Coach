@@ -32,31 +32,11 @@ const SessionSummaryPage = () => {
     fetchSession();
   }, [sessionId]);
 
-  if (isLoading) {
-    return (
-      <PageLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </PageLayout>
-    );
-  }
-
-  if (!session) {
-    return (
-      <PageLayout>
-        <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-text-primary">Session not found</h2>
-          <Button variant="secondary" className="mt-4" onClick={() => navigate('/dashboard')}>
-            Back to Dashboard
-          </Button>
-        </div>
-      </PageLayout>
-    );
-  }
-
   // Calculate aggregates
   const stats = React.useMemo(() => {
+    if (!session || !session.questions) {
+      return { completedQuestions: [], avgContentScore: 0, avgWpm: 0, totalQuestions: 0, durationMinutes: 0 };
+    }
     const completedQuestions = session.questions.filter(
       (q) => q.transcript && q.contentScore !== undefined
     );
@@ -84,6 +64,30 @@ const SessionSummaryPage = () => {
       durationMinutes,
     };
   }, [session]);
+
+  if (isLoading) {
+    return (
+      <PageLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </PageLayout>
+    );
+  }
+
+  if (!session) {
+    return (
+      <PageLayout>
+        <div className="text-center py-20">
+          <h2 className="text-2xl font-bold text-text-primary">Session not found</h2>
+          <Button variant="secondary" className="mt-4" onClick={() => navigate('/dashboard')}>
+            Back to Dashboard
+          </Button>
+        </div>
+      </PageLayout>
+    );
+  }
+
 
   return (
     <PageLayout>
