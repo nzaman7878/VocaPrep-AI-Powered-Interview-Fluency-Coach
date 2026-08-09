@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: vocaprep-chromadb
+    ports:
+      - '8000:8000'
+    volumes:
+      - chromadata:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ALLOW_RESET=TRUE
+    restart: unless-stopped
+
+volumes:
+  chromadata:
