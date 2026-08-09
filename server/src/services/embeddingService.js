@@ -78,7 +78,9 @@ Areas for Improvement: ${(question.areasForImprovement || []).join(', ')}
         `Successfully embedded question attempt ${documentId} for session ${session._id}`
       );
     } catch (error) {
-      logger.error('Error embedding question attempt:', error);
+      if (process.env.NODE_ENV === 'production') {
+        logger.error('Error embedding question attempt:', error);
+      }
       // Not throwing error to prevent disrupting the core flow
     }
   }

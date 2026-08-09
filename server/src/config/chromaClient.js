@@ -19,7 +19,11 @@ class ChromaDatabase {
       logger.info(`ChromaDB connected successfully at ${chromaUrl}. Heartbeat: ${heartbeat}`);
       this.isConnected = true;
     } catch (error) {
-      logger.error(`Error connecting to ChromaDB at ${chromaUrl}:`, error.message);
+      if (process.env.NODE_ENV !== 'production') {
+        logger.warn(`ChromaDB is not running at ${chromaUrl}. Adaptive questioning (RAG) is gracefully disabled.`);
+      } else {
+        logger.error(`Error connecting to ChromaDB at ${chromaUrl}:`, error.message);
+      }
       // We don't throw here to prevent server crash if Chroma is down.
       // We can retry or handle gracefully during query time.
     }

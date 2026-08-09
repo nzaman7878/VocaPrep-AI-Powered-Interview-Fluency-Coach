@@ -8,7 +8,9 @@ class RetrievalService {
     try {
       return await chromaClient.getCollection({ name: COLLECTION_NAME });
     } catch (error) {
-      logger.warn('ChromaDB collection not found or not initialized yet.');
+      if (process.env.NODE_ENV === 'production') {
+        logger.warn('ChromaDB collection not found or not initialized yet.');
+      }
       return null;
     }
   }
