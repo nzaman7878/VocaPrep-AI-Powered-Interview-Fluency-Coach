@@ -36,6 +36,7 @@ export const generateQuestion = asyncHandler(async (req, res) => {
   // This runs `generateQuestionNode` and then pauses precisely at our `interruptBefore` breakpoint
   const result = await evaluationGraph.invoke(
     {
+      userId: req.user.id,
       role,
       questionType,
       sessionHistory,

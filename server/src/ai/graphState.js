@@ -6,6 +6,7 @@ import { Annotation } from '@langchain/langgraph';
  */
 export const InterviewEvaluationState = Annotation.Root({
   // --- Pipeline Inputs ---
+  userId: Annotation(),
   role: Annotation(),
   questionType: Annotation(), // e.g. 'behavioral', 'technical'
   questionText: Annotation(),
