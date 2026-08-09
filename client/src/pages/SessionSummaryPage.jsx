@@ -82,17 +82,19 @@ const SessionSummaryPage = () => {
   return (
     <PageLayout>
       <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center text-slate-500 hover:text-indigo-600 transition-colors font-medium"
+            className="flex items-center text-slate-500 hover:text-indigo-600 transition-colors font-medium self-start md:self-auto"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Dashboard
           </button>
 
-          <div className="flex flex-col items-end">
-            <h1 className="text-3xl font-bold text-slate-800 font-display">Interview Summary</h1>
+          <div className="flex flex-col items-start md:items-end">
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-800 font-display">
+              Interview Summary
+            </h1>
             <p className="text-slate-500">
               Role: <span className="font-semibold text-slate-700 capitalize">{session.role}</span>
             </p>

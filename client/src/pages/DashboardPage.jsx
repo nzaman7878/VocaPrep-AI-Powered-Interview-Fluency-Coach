@@ -7,6 +7,7 @@ import WpmTrendChart from '../components/dashboard/WpmTrendChart';
 import FillerRateTrendChart from '../components/dashboard/FillerRateTrendChart';
 import ContentScoreTrendChart from '../components/dashboard/ContentScoreTrendChart';
 import SessionHistoryList from '../components/dashboard/SessionHistoryList';
+import WeakAreasCard from '../components/dashboard/WeakAreasCard';
 import { progressApi } from '../api/progressApi';
 import { sessionApi } from '../api/sessionApi';
 import {
@@ -131,15 +132,16 @@ const DashboardPage = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-          <div className="xl:col-span-1">
-            <ContentScoreTrendChart data={history} />
-          </div>
-          <div className="xl:col-span-1">
-            <WpmTrendChart data={history} />
-          </div>
-          <div className="xl:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <ContentScoreTrendChart data={history} />
+              <WpmTrendChart data={history} />
+            </div>
             <FillerRateTrendChart data={history} />
+          </div>
+          <div className="lg:col-span-1">
+            <WeakAreasCard weakAreas={[]} /> {/* Empty for now until frontend fetches RAG data */}
           </div>
         </div>
 

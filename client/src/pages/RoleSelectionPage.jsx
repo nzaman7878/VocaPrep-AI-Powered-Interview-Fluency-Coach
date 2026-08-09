@@ -59,14 +59,14 @@ const RoleSelectionPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div className="mb-12 max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-5xl font-extrabold text-slate-900 mb-4 font-display tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 font-display tracking-tight">
               Configure Your{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 Interview Room
@@ -108,8 +108,8 @@ const RoleSelectionPage = () => {
               <p className="text-sm text-slate-500">Configure your specific parameters.</p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6">
-              <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-2xl border border-slate-100">
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-4 sm:gap-6">
+              <div className="flex items-center justify-between sm:justify-start gap-4 bg-slate-50 p-2 rounded-2xl border border-slate-100">
                 <span className="text-sm font-medium text-slate-700 pl-2">Questions:</span>
                 <div className="flex bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
                   {[3, 5, 7].map((num) => (
