@@ -35,9 +35,9 @@ const DeliveryMetricsCard = ({ delivery }) => {
         ))}
       </div>
 
-      {interpretation && (
+      {interpretation && interpretation.feedback && (
         <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50 mt-auto">
-          <p className="text-sm text-indigo-900 leading-relaxed italic">"{interpretation}"</p>
+          <p className="text-sm text-indigo-900 leading-relaxed italic">"{interpretation.feedback}"</p>
         </div>
       )}
     </motion.div>
