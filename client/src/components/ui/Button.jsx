@@ -44,6 +44,8 @@ const Button = forwardRef(
       <button
         ref={ref}
         disabled={disabled || isLoading}
+        aria-disabled={disabled || isLoading}
+        aria-busy={isLoading}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
       >

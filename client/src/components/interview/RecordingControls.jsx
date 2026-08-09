@@ -23,7 +23,11 @@ const RecordingControls = ({
   return (
     <div className="flex flex-col items-center justify-center p-6 space-y-6 bg-surface-50 dark:bg-surface-900 rounded-2xl border border-border-light dark:border-border-dark shadow-sm">
       {/* Animated State Indicator & Timer */}
-      <div className="flex items-center justify-center space-x-3 bg-surface-100 dark:bg-surface-800 px-6 py-3 rounded-full border border-border-light dark:border-border-dark">
+      <div
+        className="flex items-center justify-center space-x-3 bg-surface-100 dark:bg-surface-800 px-6 py-3 rounded-full border border-border-light dark:border-border-dark"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {/* Blinking red dot when actively recording */}
         <div
           className={`w-3 h-3 rounded-full transition-colors duration-300 ${
@@ -91,7 +95,7 @@ const RecordingControls = ({
       </div>
 
       {/* Helper text */}
-      <div className="text-sm text-text-tertiary font-medium">
+      <div className="text-sm text-text-tertiary font-medium" aria-live="polite">
         {isRecording && !isPaused && 'Speak clearly into your microphone'}
         {isPaused && 'Recording paused'}
         {!isRecording && !isProcessing && 'Press start when you are ready'}

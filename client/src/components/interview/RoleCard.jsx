@@ -4,11 +4,13 @@ import { motion } from 'framer-motion';
 
 const RoleCard = ({ role, isSelected, onClick }) => {
   return (
-    <motion.div
+    <motion.button
+      type="button"
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
       onClick={() => onClick(role)}
-      className={`relative cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex flex-col h-full ${
+      aria-pressed={isSelected}
+      className={`relative w-full text-left cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex flex-col h-full focus:outline-none focus:ring-4 focus:ring-indigo-500/50 ${
         isSelected
           ? 'border-indigo-600 bg-indigo-50 shadow-xl shadow-indigo-100/50'
           : 'border-slate-200 bg-white hover:border-indigo-300 hover:shadow-lg hover:shadow-slate-100'
@@ -31,7 +33,7 @@ const RoleCard = ({ role, isSelected, onClick }) => {
           </Badge>
         ))}
       </div>
-    </motion.div>
+    </motion.button>
   );
 };
 
