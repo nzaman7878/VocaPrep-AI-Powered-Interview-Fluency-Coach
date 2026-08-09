@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProfile, logout } from './store/slices/authSlice';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import Spinner from './components/ui/Spinner';
+import ProtectedRoute from './components/layout/ProtectedRoute';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -14,6 +17,21 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
 function App() {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token && !user) {
+      dispatch(fetchProfile())
+        .unwrap()
+        .catch(() => {
+          // If profile fetch fails (e.g. invalid token), logout to clear state
+          dispatch(logout());
+        });
+    }
+  }, [dispatch, user]);
+
   return (
     <ErrorBoundary>
       <Router>
@@ -28,10 +46,42 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/role-selection" element={<RoleSelectionPage />} />
-            <Route path="/interview/:sessionId" element={<InterviewPage />} />
-            <Route path="/summary/:sessionId" element={<SessionSummaryPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/role-selection"
+              element={
+                <ProtectedRoute>
+                  <RoleSelectionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/interview/:sessionId"
+              element={
+                <ProtectedRoute>
+                  <InterviewPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/summary/:sessionId"
+              element={
+                <ProtectedRoute>
+                  <SessionSummaryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Error Pages */}
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

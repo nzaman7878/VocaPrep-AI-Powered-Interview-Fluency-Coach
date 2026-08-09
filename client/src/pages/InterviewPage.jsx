@@ -212,11 +212,11 @@ const InterviewPage = () => {
               exit={{ opacity: 0, y: -20 }}
               className="flex flex-col gap-6"
             >
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl shadow-slate-100/50">
-                <h3 className="text-xl font-bold text-slate-800 mb-2 font-display">
+              <div className="bg-surface rounded-3xl p-6 border border-surface-elevated shadow-xl">
+                <h3 className="text-xl font-bold text-text-primary mb-2 font-display">
                   Your Transcript
                 </h3>
-                <p className="text-slate-600 leading-relaxed italic">
+                <p className="text-text-muted leading-relaxed italic">
                   "{evaluationResult?.transcript}"
                 </p>
               </div>
@@ -224,11 +224,7 @@ const InterviewPage = () => {
               <FeedbackReport evaluationResult={evaluationResult} />
 
               <div className="flex justify-end mt-2">
-                <Button
-                  size="lg"
-                  onClick={handleNextQuestion}
-                  className="shadow-lg shadow-indigo-200"
-                >
+                <Button size="lg" onClick={handleNextQuestion}>
                   Continue to Next Question
                 </Button>
               </div>

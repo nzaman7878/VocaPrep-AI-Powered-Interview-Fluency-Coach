@@ -4,8 +4,11 @@ import { logout } from '../../store/slices/authSlice';
 import Button from '../ui/Button';
 
 export const Navbar = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  // Compute authentication state locally instead of relying on non-existent slice property
+  const isAuthenticated = !!user || !!localStorage.getItem('accessToken');
 
   const handleLogout = () => {
     dispatch(logout());
@@ -37,18 +40,18 @@ export const Navbar = () => {
         </div>
 
         <nav className="hidden md:flex items-center gap-6">
-          <Link
-            to="/features"
+          <a
+            href="/#features"
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             Features
-          </Link>
-          <Link
-            to="/pricing"
+          </a>
+          <a
+            href="/#how-it-works"
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
-            Pricing
-          </Link>
+            How it Works
+          </a>
         </nav>
 
         <div className="flex items-center gap-4">

@@ -78,12 +78,9 @@ const DashboardPage = () => {
   } = useRetry(fetchDataFn);
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+    // Navigate check removed because ProtectedRoute handles it
     fetchDashboardData();
-  }, [user, navigate, fetchDashboardData]);
+  }, [fetchDashboardData]);
 
   if (isFetching || isLoading) {
     return (
@@ -121,10 +118,10 @@ const DashboardPage = () => {
     <PageLayout>
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-slate-800 font-display tracking-tight mb-2">
+          <h1 className="text-3xl font-black text-text-primary font-display tracking-tight mb-2">
             Your Progress Dashboard
           </h1>
-          <p className="text-slate-500 text-lg">
+          <p className="text-text-muted text-lg">
             Track your interview fluency and improvement over time.
           </p>
         </div>

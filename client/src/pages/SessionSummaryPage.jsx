@@ -46,7 +46,7 @@ const SessionSummaryPage = () => {
     return (
       <PageLayout>
         <div className="text-center py-20">
-          <h2 className="text-2xl font-bold text-slate-800">Session not found</h2>
+          <h2 className="text-2xl font-bold text-text-primary">Session not found</h2>
           <Button variant="secondary" className="mt-4" onClick={() => navigate('/dashboard')}>
             Back to Dashboard
           </Button>
@@ -91,18 +91,19 @@ const SessionSummaryPage = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center text-slate-500 hover:text-indigo-600 transition-colors font-medium self-start md:self-auto"
+            className="flex items-center text-text-muted hover:text-primary transition-colors font-medium self-start md:self-auto"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Dashboard
           </button>
 
           <div className="flex flex-col items-start md:items-end">
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-800 font-display">
+            <h1 className="text-2xl md:text-3xl font-bold text-text-primary font-display">
               Interview Summary
             </h1>
-            <p className="text-slate-500">
-              Role: <span className="font-semibold text-slate-700 capitalize">{session.role}</span>
+            <p className="text-text-muted">
+              Role:{' '}
+              <span className="font-semibold text-text-primary capitalize">{session.role}</span>
             </p>
           </div>
         </div>
@@ -112,7 +113,7 @@ const SessionSummaryPage = () => {
         </div>
 
         <div className="space-y-12">
-          <h2 className="text-2xl font-bold text-slate-800 font-display mb-6 border-b border-slate-200 pb-4">
+          <h2 className="text-2xl font-bold text-text-primary font-display mb-6 border-b border-surface-elevated pb-4">
             Detailed Question Analysis
           </h2>
 
@@ -122,19 +123,19 @@ const SessionSummaryPage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="bg-slate-50 rounded-3xl p-8 border border-slate-200"
+              className="bg-surface rounded-3xl p-8 border border-surface-elevated shadow-xl"
             >
               <div className="mb-6">
-                <span className="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-3">
+                <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3">
                   Question {index + 1} • {q.questionType}
                 </span>
-                <h3 className="text-xl font-bold text-slate-800 mb-4">{q.questionText}</h3>
+                <h3 className="text-xl font-bold text-text-primary mb-4">{q.questionText}</h3>
 
-                <div className="bg-white p-5 rounded-2xl border border-slate-200">
-                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
+                <div className="bg-background p-5 rounded-2xl border border-surface-elevated">
+                  <h4 className="text-sm font-bold text-text-muted uppercase tracking-wider mb-2">
                     Your Answer
                   </h4>
-                  <p className="text-slate-700 italic leading-relaxed">"{q.transcript}"</p>
+                  <p className="text-text-primary italic leading-relaxed">"{q.transcript}"</p>
                 </div>
               </div>
 
@@ -149,8 +150,8 @@ const SessionSummaryPage = () => {
           ))}
 
           {stats.completedQuestions.length === 0 && (
-            <div className="text-center py-10 bg-slate-50 rounded-2xl border border-slate-200">
-              <p className="text-slate-500 font-medium">
+            <div className="text-center py-10 bg-surface rounded-2xl border border-surface-elevated">
+              <p className="text-text-muted font-medium">
                 No completed questions found for this session.
               </p>
             </div>

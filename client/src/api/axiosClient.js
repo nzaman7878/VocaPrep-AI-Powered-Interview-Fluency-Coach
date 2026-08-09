@@ -29,8 +29,16 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Basic error handling - could trigger a logout event here if 401
-    // e.g., if (error.response && error.response.status === 401) { logout() }
+    // Basic error handling - clear token and reload/redirect if 401 Unauthorized
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      // Dispatching a Redux action from outside components can be tricky without the store instance.
+      // Easiest reliable fallback is a hard redirect which will re-initialize the app state cleanly.
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
     return Promise.reject(error);
   }
 );
