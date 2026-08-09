@@ -43,7 +43,7 @@ export const getSessions = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .skip(startIndex)
     .limit(limit)
-    .select('-questions'); // Exclude embedded questions for the list view to save bandwidth
+    .select('-questions.feedback -questions.contentFeedback -questions.deliveryFeedback -questions.transcript'); // Exclude heavy embedded fields for the list view to save bandwidth
 
   res.status(200).json(
     new ApiResponse(

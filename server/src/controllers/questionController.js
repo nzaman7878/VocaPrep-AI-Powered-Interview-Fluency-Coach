@@ -52,7 +52,7 @@ export const addQuestionAttempt = asyncHandler(async (req, res) => {
   };
 
   session.questions.push(newAttempt);
-  session.totalQuestions = session.questions.length;
+
 
   await session.save();
 
