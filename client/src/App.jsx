@@ -10,6 +10,8 @@ const RoleSelectionPage = lazy(() => import('./pages/RoleSelectionPage'));
 const InterviewPage = lazy(() => import('./pages/InterviewPage'));
 const SessionSummaryPage = lazy(() => import('./pages/SessionSummaryPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="/interview/:sessionId" element={<InterviewPage />} />
             <Route path="/summary/:sessionId" element={<SessionSummaryPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/error" element={<ErrorPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </Router>
