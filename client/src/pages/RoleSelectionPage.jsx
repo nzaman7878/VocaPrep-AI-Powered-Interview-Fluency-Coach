@@ -62,7 +62,13 @@ const RoleSelectionPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+      {/* Abstract Background Elements */}
+      <div className="fixed inset-0 bg-grain opacity-[0.04] dark:opacity-[0.02] pointer-events-none mix-blend-overlay z-0" />
+      <div className="fixed -top-32 -left-32 w-[600px] h-[600px] bg-primary/10 dark:bg-primary/5 rounded-full blur-[120px] pointer-events-none animate-blob z-0" />
+      <div className="fixed top-1/2 -right-32 w-[700px] h-[700px] bg-secondary/10 dark:bg-secondary/5 rounded-full blur-[120px] pointer-events-none animate-blob animation-delay-2000 z-0" />
+      <div className="fixed -bottom-40 left-1/4 w-[600px] h-[600px] bg-accent/10 dark:bg-accent/5 rounded-full blur-[120px] pointer-events-none animate-blob animation-delay-4000 z-0" />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         <div className="mb-12 max-w-2xl">
           <motion.div
             initial={{ opacity: 0, y: -20 }}

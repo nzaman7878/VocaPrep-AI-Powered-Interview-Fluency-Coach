@@ -10,16 +10,21 @@ const RoleCard = ({ role, isSelected, onClick }) => {
       whileTap={{ scale: 0.98 }}
       onClick={() => onClick(role)}
       aria-pressed={isSelected}
-      className={`relative w-full text-left cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex flex-col h-full focus:outline-none focus:ring-4 focus:ring-primary/30 ${
+      className={`relative w-full text-left cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex flex-col h-full focus:outline-none focus:ring-4 focus:ring-primary/30 overflow-hidden ${
         isSelected
-          ? 'border-primary bg-primary/5 shadow-premium'
-          : 'glass-panel hover:border-primary/40 hover:shadow-xl'
+          ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(79,70,229,0.15)] dark:shadow-[0_0_30px_rgba(99,102,241,0.15)]'
+          : 'bg-surface/40 backdrop-blur-md border-surface-elevated/50 hover:bg-surface/60 hover:border-primary/40 hover:shadow-xl'
       }`}
     >
+      {/* Decorative gradient for selected state */}
+      {isSelected && (
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none" />
+      )}
+
       {isSelected && (
         <motion.div
           layoutId="role-selection-indicator"
-          className="absolute top-6 right-6 h-3 w-3 bg-primary rounded-full shadow-[0_0_12px_var(--color-primary)] opacity-80"
+          className="absolute top-6 right-6 h-3.5 w-3.5 bg-primary rounded-full shadow-[0_0_15px_var(--color-primary)] opacity-100"
         />
       )}
 
