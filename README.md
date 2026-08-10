@@ -61,7 +61,8 @@ Most interview-prep tools evaluate **content only**. None evaluate **delivery** 
 | **MongoDB Atlas + Mongoose** | Primary database for users, sessions, and progress snapshots |
 | **ChromaDB** | Vector database for storing interview embeddings (RAG) |
 | **LangChain.js + LangGraph.js** | Agentic AI orchestration — multi-node evaluation graph |
-| **Google Gemini** | LLM for content evaluation, question generation, and coaching synthesis |
+| **Google Gemini (1.5 Flash)** | LLM for high-speed dynamic question generation |
+| **Mistral AI (Large)** | LLM for complex reasoning and structured transcript evaluation |
 | **Gemini Embeddings** | `gemini-embedding-2` model for vectorizing interview transcripts |
 | **AssemblyAI** | Speech-to-text with word-level timestamps for delivery analysis |
 | **Cloudinary** | Audio file storage (uploaded recordings) |
@@ -115,14 +116,14 @@ graph TD
 
 The evaluation pipeline is built with **LangGraph.js** using a fan-out/fan-in pattern:
 
-1. **Question Generator** — Uses RAG to pull historical weak areas from ChromaDB and generates role-specific, difficulty-scaled interview questions via Gemini
-2. **Content Evaluator** — Analyzes the transcript for correctness, structure (STAR method), and relevance to the question
-3. **Delivery Evaluator** — Computes fluency metrics from AssemblyAI's word-level timestamps:
+1. **Question Generator** — Uses RAG to pull historical weak areas from ChromaDB and generates role-specific, difficulty-scaled interview questions via **Google Gemini**
+2. **Content Evaluator** — Analyzes the transcript for correctness, structure (STAR method), and relevance to the question via **Mistral AI**
+3. **Delivery Evaluator** — Computes fluency metrics from AssemblyAI's word-level timestamps and feeds them to **Mistral AI** for synthesis:
    - Words Per Minute (WPM)
    - Filler word detection and rate calculation
    - Pause frequency, average length, and longest pause
    - Run-on sentence identification
-4. **Coach Synthesis** — Merges content and delivery evaluations into a unified, actionable coaching report
+4. **Coach Synthesis** — Merges content and delivery evaluations into a unified, actionable coaching report via **Mistral AI**
 
 ### Database Layer
 
@@ -185,7 +186,8 @@ VocaPrep/
 - **Docker** (for ChromaDB vector database)
 - **MongoDB** instance (local or [MongoDB Atlas](https://www.mongodb.com/atlas))
 - API Keys:
-  - [Google Gemini](https://ai.google.dev/) — LLM and embeddings
+  - [Google Gemini](https://ai.google.dev/) — LLM for generation and embeddings
+  - [Mistral AI](https://console.mistral.ai/) — LLM for answer evaluation
   - [AssemblyAI](https://www.assemblyai.com/) — Speech-to-text
   - [Cloudinary](https://cloudinary.com/) — Audio file storage
 
@@ -218,7 +220,8 @@ cp .env.example server/.env
 |---|---|---|
 | `MONGODB_URI` | MongoDB connection string | ✅ |
 | `JWT_SECRET` | Secret key for signing JWTs | ✅ |
-| `GEMINI_API_KEY` | Google Gemini API key (for LLM + embeddings) | ✅ |
+| `GEMINI_API_KEY` | Google Gemini API key (for generation + embeddings) | ✅ |
+| `MISTRAL_API_KEY` | Mistral AI API key (for transcript evaluation) | ✅ |
 | `ASSEMBLYAI_API_KEY` | AssemblyAI API key (for speech-to-text) | ✅ |
 | `CLOUDINARY_URL` | Cloudinary connection URL (for audio upload) | Optional |
 | `CHROMA_URL` | ChromaDB server URL (default: `http://localhost:8000`) | Optional |
