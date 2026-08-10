@@ -57,9 +57,11 @@ const DashboardPage = () => {
       contentScore: (snap.avgContentScore || 0) * 10,
     }));
 
+    const totalSessionsCount = sessionsData.data?.pagination?.total || sessionList.length;
+
     dispatch(
       setProgressData({
-        totalSessions: summary.totalSessions || 0,
+        totalSessions: totalSessionsCount,
         averageScore: (summary.avgContentScore || 0) * 10,
         totalPracticeTimeSeconds: (summary.totalQuestions || 0) * 120, // 2 minutes per question rough estimation
         history: scaledHistoryList,
