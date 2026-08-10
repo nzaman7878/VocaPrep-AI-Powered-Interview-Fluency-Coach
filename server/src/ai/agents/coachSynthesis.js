@@ -1,10 +1,10 @@
-import { llm } from '../llmClient.js';
+import { mistralLlm } from '../llmClient.js';
 import { coachSynthesisPrompt } from '../prompts/coachSynthesisPrompt.js';
 
 /**
  * LangGraph Node: Coach Synthesis
  *
- * Takes the raw data from the Content and Delivery nodes and invokes the Gemini LLM
+ * Takes the raw data from the Content and Delivery nodes and invokes the Mistral LLM
  * to synthesize a final, human-readable coaching report.
  * Maps the output to the precise schema required by the frontend.
  *
@@ -33,7 +33,7 @@ export const synthesizeCoachingNode = async (state) => {
     };
   }
 
-  const chain = coachSynthesisPrompt.pipe(llm);
+  const chain = coachSynthesisPrompt.pipe(mistralLlm);
 
   const response = await chain.invoke({
     contentScore: contentEvaluation.score,

@@ -27,6 +27,7 @@ export const env = {
   MONGODB_URI: process.env.MONGODB_URI,
   JWT_SECRET: process.env.JWT_SECRET,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+  MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
   ASSEMBLYAI_API_KEY: process.env.ASSEMBLYAI_API_KEY,
   CLOUDINARY_URL: process.env.CLOUDINARY_URL,
   CHROMA_URL: process.env.CHROMA_URL || 'http://localhost:8000',

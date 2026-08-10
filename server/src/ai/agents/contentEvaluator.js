@@ -1,10 +1,10 @@
-import { llm } from '../llmClient.js';
+import { mistralLlm } from '../llmClient.js';
 import { contentEvaluatorPrompt } from '../prompts/contentEvaluatorPrompt.js';
 
 /**
  * LangGraph Node: Content Evaluator
  *
- * Invokes Gemini to evaluate the transcript content based on correctness,
+ * Invokes Mistral to evaluate the transcript content based on correctness,
  * structure (STAR method/logical flow), and completeness.
  *
  * @param {Object} state - The current LangGraph InterviewEvaluationState
@@ -29,7 +29,7 @@ export const evaluateContentNode = async (state) => {
   }
 
   // Pipe the variables into the prompt and then to the LLM
-  const chain = contentEvaluatorPrompt.pipe(llm);
+  const chain = contentEvaluatorPrompt.pipe(mistralLlm);
 
   const response = await chain.invoke({
     role: role || 'Software Engineer',

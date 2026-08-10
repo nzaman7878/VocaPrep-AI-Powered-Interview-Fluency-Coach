@@ -1,4 +1,4 @@
-import { llm } from '../llmClient.js';
+import { mistralLlm } from '../llmClient.js';
 import { deliveryEvaluatorPrompt } from '../prompts/deliveryEvaluatorPrompt.js';
 import { calculateWPM } from '../delivery/wpmCalculator.js';
 import { detectFillers } from '../delivery/fillerDetector.js';
@@ -10,7 +10,7 @@ import { detectRunOnSentences } from '../delivery/runOnDetector.js';
  *
  * Orchestrates the delivery evaluation pipeline. First, it computes hard,
  * deterministic metrics using our utility calculators. Then, it feeds those
- * metrics to the Gemini LLM for human-readable interpretation and scoring.
+ * metrics to the Mistral LLM for human-readable interpretation and scoring.
  *
  * @param {Object} state - The current LangGraph InterviewEvaluationState
  * @returns {Object} Partial state update containing the `deliveryEvaluation`
@@ -51,7 +51,7 @@ export const evaluateDeliveryNode = async (state) => {
   const runOnCount = runOnMetrics.runOnCount;
 
   // 2. Pipeline: Feed metrics to LLM for interpretation
-  const chain = deliveryEvaluatorPrompt.pipe(llm);
+  const chain = deliveryEvaluatorPrompt.pipe(mistralLlm);
 
   const response = await chain.invoke({
     wpm,
