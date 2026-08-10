@@ -30,7 +30,9 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="w-full mx-auto overflow-hidden glass-panel shadow-premium rounded-3xl p-8 md:p-10 transition-all duration-300">
+    <div className="w-full mx-auto overflow-hidden bg-surface/40 backdrop-blur-2xl border border-surface-elevated/50 shadow-premium rounded-3xl p-8 md:p-10 transition-all duration-300 relative">
+      {/* Decorative top gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent opacity-80" />
       <div className="text-center mb-8">
         <h2 className="text-3xl font-display font-bold text-text-primary">
           Create Account
@@ -60,7 +62,7 @@ export default function RegisterForm() {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full pl-11 pr-4 py-3 bg-surface border border-surface-elevated rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 outline-none shadow-sm"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 backdrop-blur-sm border border-surface-elevated/80 rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 outline-none shadow-sm"
               placeholder="Jane Doe"
             />
           </div>
@@ -78,7 +80,7 @@ export default function RegisterForm() {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full pl-11 pr-4 py-3 bg-surface border border-surface-elevated rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 outline-none shadow-sm"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 backdrop-blur-sm border border-surface-elevated/80 rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 outline-none shadow-sm"
               placeholder="you@example.com"
             />
           </div>
@@ -97,7 +99,7 @@ export default function RegisterForm() {
               minLength={6}
               value={formData.password}
               onChange={handleChange}
-              className="w-full pl-11 pr-4 py-3 bg-surface border border-surface-elevated rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 outline-none shadow-sm"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 backdrop-blur-sm border border-surface-elevated/80 rounded-xl text-text-primary placeholder:text-text-muted/50 focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 outline-none shadow-sm"
               placeholder="••••••••"
             />
           </div>
@@ -113,7 +115,7 @@ export default function RegisterForm() {
               name="targetRole"
               value={formData.targetRole}
               onChange={handleChange}
-              className="w-full pl-11 pr-4 py-3 bg-surface border border-surface-elevated rounded-xl text-text-primary focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 outline-none appearance-none shadow-sm"
+              className="w-full pl-11 pr-4 py-3.5 bg-surface/50 backdrop-blur-sm border border-surface-elevated/80 rounded-xl text-text-primary focus:bg-surface focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 outline-none appearance-none shadow-sm"
             >
               {ROLES.map((role) => (
                 <option key={role.id} value={role.id}>

@@ -20,9 +20,10 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 relative overflow-hidden pt-20">
       {/* Abstract Background Elements */}
-      <div className="absolute inset-0 bg-waveform-motif opacity-[0.03] dark:opacity-[0.05] pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 bg-grain opacity-[0.04] dark:opacity-[0.02] pointer-events-none mix-blend-overlay" />
+      <div className="absolute -top-32 -left-32 w-[600px] h-[600px] bg-primary/20 dark:bg-primary/10 rounded-full blur-[120px] pointer-events-none animate-blob" />
+      <div className="absolute top-1/2 -right-32 w-[700px] h-[700px] bg-secondary/20 dark:bg-secondary/10 rounded-full blur-[120px] pointer-events-none animate-blob animation-delay-2000" />
+      <div className="absolute -bottom-40 left-1/4 w-[600px] h-[600px] bg-accent/20 dark:bg-accent/10 rounded-full blur-[120px] pointer-events-none animate-blob animation-delay-4000" />
 
       <div className="relative z-10 w-full max-w-md my-8">
         <div className="text-center mb-8 flex flex-col items-center">
