@@ -7,9 +7,9 @@ const ContentScoreCard = ({ evaluation }) => {
 
   // Color coding based on score
   const getScoreColor = (s) => {
-    if (s >= 8) return 'text-emerald-500 bg-emerald-50 border-emerald-100';
-    if (s >= 6) return 'text-amber-500 bg-amber-50 border-amber-100';
-    return 'text-rose-500 bg-rose-50 border-rose-100';
+    if (s >= 8) return 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20';
+    if (s >= 6) return 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20';
+    return 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20';
   };
 
   const scoreColor = getScoreColor(score);
@@ -18,10 +18,10 @@ const ContentScoreCard = ({ evaluation }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl shadow-slate-100/50 flex flex-col h-full"
+      className="bg-surface rounded-3xl p-6 border border-surface-elevated shadow-premium flex flex-col h-full"
     >
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-slate-800 font-display">Content Quality</h3>
+        <h3 className="text-xl font-bold text-text-primary font-display">Content Quality</h3>
         <div
           className={`flex items-center justify-center w-14 h-14 rounded-2xl border-2 shadow-sm ${scoreColor}`}
         >
@@ -48,7 +48,7 @@ const ContentScoreCard = ({ evaluation }) => {
               {strengths.slice(0, 2).map((s, i) => (
                 <li
                   key={i}
-                  className="text-sm text-slate-600 pl-5 relative before:absolute before:left-1 before:top-2 before:w-1.5 before:h-1.5 before:bg-emerald-400 before:rounded-full"
+                  className="text-sm text-text-muted pl-5 relative before:absolute before:left-1 before:top-2 before:w-1.5 before:h-1.5 before:bg-emerald-400 before:rounded-full"
                 >
                   {s}
                 </li>
@@ -74,7 +74,7 @@ const ContentScoreCard = ({ evaluation }) => {
               {weaknesses.slice(0, 2).map((w, i) => (
                 <li
                   key={i}
-                  className="text-sm text-slate-600 pl-5 relative before:absolute before:left-1 before:top-2 before:w-1.5 before:h-1.5 before:bg-amber-400 before:rounded-full"
+                  className="text-sm text-text-muted pl-5 relative before:absolute before:left-1 before:top-2 before:w-1.5 before:h-1.5 before:bg-amber-400 before:rounded-full"
                 >
                   {w}
                 </li>

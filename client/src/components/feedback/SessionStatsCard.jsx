@@ -37,9 +37,9 @@ const SessionStatsCard = ({ stats }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-100/50"
+      className="bg-surface rounded-3xl p-8 border border-surface-elevated shadow-premium"
     >
-      <h3 className="text-2xl font-bold text-slate-800 font-display mb-8 text-center">
+      <h3 className="text-2xl font-bold text-text-primary font-display mb-8 text-center">
         Session Statistics
       </h3>
 
@@ -47,13 +47,13 @@ const SessionStatsCard = ({ stats }) => {
         {statItems.map((item, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center p-4 bg-slate-50 rounded-2xl border border-slate-100"
+            className="flex flex-col items-center justify-center p-4 bg-background rounded-2xl border border-surface-elevated"
           >
             <span className={`text-3xl font-bold font-mono mb-2 ${item.color}`}>
               {item.value}
               <span className="text-lg opacity-70 ml-1">{item.suffix}</span>
             </span>
-            <span className="text-sm font-bold text-slate-500 uppercase tracking-wider text-center">
+            <span className="text-sm font-bold text-text-muted uppercase tracking-wider text-center">
               {item.label}
             </span>
           </div>

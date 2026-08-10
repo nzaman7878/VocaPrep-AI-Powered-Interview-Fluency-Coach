@@ -16,28 +16,28 @@ const DeliveryMetricsCard = ({ delivery }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xl shadow-slate-100/50 flex flex-col h-full"
+      className="bg-surface rounded-3xl p-6 border border-surface-elevated shadow-premium flex flex-col h-full"
     >
-      <h3 className="text-xl font-bold text-slate-800 font-display mb-6">Delivery & Fluency</h3>
+      <h3 className="text-xl font-bold text-text-primary font-display mb-6">Delivery & Fluency</h3>
 
       <div className="grid grid-cols-3 gap-3 mb-6">
         {metrics.map((m, i) => (
           <div
             key={i}
-            className="bg-slate-50 rounded-2xl p-3 border border-slate-100 text-center flex flex-col justify-center"
+            className="bg-background rounded-2xl p-3 border border-surface-elevated text-center flex flex-col justify-center"
           >
-            <span className="text-2xl font-bold font-mono text-indigo-600">
+            <span className="text-2xl font-bold font-mono text-primary">
               {m.value}
               {m.suffix}
             </span>
-            <span className="text-xs font-bold text-slate-400 uppercase mt-1">{m.label}</span>
+            <span className="text-xs font-bold text-text-muted uppercase mt-1">{m.label}</span>
           </div>
         ))}
       </div>
 
       {interpretation && interpretation.feedback && (
-        <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50 mt-auto">
-          <p className="text-sm text-indigo-900 leading-relaxed italic">"{interpretation.feedback}"</p>
+        <div className="bg-primary/10 p-4 rounded-2xl border border-primary/20 mt-auto">
+          <p className="text-sm text-text-primary leading-relaxed italic">"{interpretation.feedback}"</p>
         </div>
       )}
     </motion.div>
