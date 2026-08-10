@@ -139,50 +139,48 @@ export const Navbar = () => {
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
+      <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between relative">
         
-        {/* Left: Logo & Main Nav */}
-        <div className="flex items-center gap-10">
-          <Link to="/" className="flex items-center gap-3 group">
-            {/* Logo motif */}
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary relative overflow-hidden transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105">
-              <div className="absolute inset-0 bg-waveform-motif opacity-50" />
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 2v20M17 5v14M7 5v14M22 10v4M2 10v4" />
-              </svg>
-            </div>
-            <span className="font-display font-bold text-2xl tracking-tight text-text-primary">
-              Voca<span className="text-primary">Prep</span>
-            </span>
-          </Link>
+        {/* Left: Logo */}
+        <Link to="/" className="flex items-center gap-3 group z-10">
+          {/* Logo motif */}
+          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary relative overflow-hidden transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105">
+            <div className="absolute inset-0 bg-waveform-motif opacity-50" />
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2v20M17 5v14M7 5v14M22 10v4M2 10v4" />
+            </svg>
+          </div>
+          <span className="font-display font-bold text-2xl tracking-tight text-text-primary">
+            Voca<span className="text-primary">Prep</span>
+          </span>
+        </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                onClick={(e) => handleScrollTo(e, link.id)}
-                className="text-sm font-semibold text-text-muted hover:text-text-primary transition-colors relative group py-2"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full rounded-full" />
-              </Link>
-            ))}
-          </nav>
-        </div>
+        {/* Center: Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              to={link.href}
+              onClick={(e) => handleScrollTo(e, link.id)}
+              className="text-sm font-semibold text-text-muted hover:text-text-primary transition-colors relative group py-2"
+            >
+              {link.label}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full rounded-full" />
+            </Link>
+          ))}
+        </nav>
 
         {/* Right: Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6 z-10">
           <ThemeToggle />
           <div className="h-6 w-px bg-surface-elevated" />
           
