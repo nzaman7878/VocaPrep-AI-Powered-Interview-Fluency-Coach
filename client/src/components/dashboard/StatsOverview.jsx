@@ -42,14 +42,14 @@ const StatCard = ({ title, value, subtitle, trend, trendLabel, icon }) => (
       )}
     </div>
     <div>
-      <h3 className="text-slate-500 font-medium text-sm mb-1">{title}</h3>
+      <h3 className="text-text-muted font-medium text-sm mb-1">{title}</h3>
       <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-black text-slate-800 tracking-tight font-display">
+        <span className="text-3xl font-black text-text-primary tracking-tight font-display">
           {value}
         </span>
-        {subtitle && <span className="text-slate-400 font-medium text-sm">{subtitle}</span>}
+        {subtitle && <span className="text-text-muted font-medium text-sm">{subtitle}</span>}
       </div>
-      {trendLabel && <p className="text-xs text-slate-400 mt-2 font-medium">{trendLabel}</p>}
+      {trendLabel && <p className="text-xs text-text-muted mt-2 font-medium">{trendLabel}</p>}
     </div>
   </div>
 );

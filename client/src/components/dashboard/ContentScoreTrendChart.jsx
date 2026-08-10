@@ -34,7 +34,7 @@ const ContentScoreTrendChart = ({ data = [] }) => {
   }
 
   return (
-    <div className="glass-panel rounded-3xl p-6 h-80 flex flex-col">
+    <div className="glass-panel shadow-premium rounded-3xl p-6 h-80 flex flex-col">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-lg font-bold text-text-primary font-display">Content Score Trend</h3>
@@ -53,39 +53,41 @@ const ContentScoreTrendChart = ({ data = [] }) => {
               bottom: 0,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-surface-elevated)" />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#94a3b8', fontSize: 12 }}
+              tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }}
               dy={10}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#94a3b8', fontSize: 12 }}
+              tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }}
               domain={[0, 100]}
             />
             <Tooltip
-              cursor={{ stroke: '#e2e8f0', strokeWidth: 2, strokeDasharray: '3 3' }}
+              cursor={{ stroke: 'var(--color-surface-elevated)', strokeWidth: 2, strokeDasharray: '3 3' }}
               contentStyle={{
-                borderRadius: '16px',
-                border: 'none',
-                boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+                backgroundColor: 'var(--color-surface)',
+                borderRadius: '12px',
+                border: '1px solid var(--color-surface-elevated)',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
                 padding: '12px 16px',
                 fontWeight: '500',
+                color: 'var(--color-text-primary)'
               }}
-              itemStyle={{ color: '#6366f1', fontWeight: 'bold' }}
+              itemStyle={{ color: 'var(--color-primary)', fontWeight: 'bold' }}
             />
             <Line
               type="monotone"
               dataKey="contentScore"
               name="Avg Score"
-              stroke="#6366f1"
+              stroke="var(--color-primary)"
               strokeWidth={4}
-              dot={{ r: 5, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
-              activeDot={{ r: 8, fill: '#4f46e5', strokeWidth: 0 }}
+              dot={{ r: 5, fill: 'var(--color-primary)', strokeWidth: 2, stroke: 'var(--color-surface)' }}
+              activeDot={{ r: 8, fill: 'var(--color-primary)', strokeWidth: 0 }}
             />
           </LineChart>
         </ResponsiveContainer>

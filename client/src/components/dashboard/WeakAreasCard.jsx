@@ -3,7 +3,7 @@ import React from 'react';
 const WeakAreasCard = ({ weakAreas = [] }) => {
   if (!weakAreas || weakAreas.length === 0) {
     return (
-      <div className="glass-panel rounded-3xl p-6 flex flex-col items-center justify-center h-full min-h-[250px]">
+      <div className="glass-panel shadow-premium rounded-3xl p-6 flex flex-col items-center justify-center h-full min-h-[250px]">
         <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mb-4">
           <svg
             className="w-8 h-8 text-emerald-500"
@@ -29,7 +29,7 @@ const WeakAreasCard = ({ weakAreas = [] }) => {
   }
 
   return (
-    <div className="glass-panel rounded-3xl p-6 h-full flex flex-col">
+    <div className="glass-panel shadow-premium rounded-3xl p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-xl font-bold text-text-primary font-display">Target Areas</h3>

@@ -8,6 +8,7 @@ import FillerRateTrendChart from '../components/dashboard/FillerRateTrendChart';
 import ContentScoreTrendChart from '../components/dashboard/ContentScoreTrendChart';
 import SessionHistoryList from '../components/dashboard/SessionHistoryList';
 import WeakAreasCard from '../components/dashboard/WeakAreasCard';
+import Button from '../components/ui/Button';
 import { progressApi } from '../api/progressApi';
 import { sessionApi } from '../api/sessionApi';
 import {
@@ -126,15 +127,18 @@ const DashboardPage = () => {
               Track your interview fluency and improvement over time.
             </p>
           </div>
-          <button
+          <Button
             onClick={() => navigate('/role-selection')}
-            className="inline-flex items-center justify-center bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-premium hover:-translate-y-1"
+            variant="primary"
+            size="lg"
+            rightIcon={
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            }
           >
             Start New Interview
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </button>
+          </Button>
         </div>
 
         <div className="mb-8">
