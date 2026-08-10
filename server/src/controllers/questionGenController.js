@@ -1,11 +1,11 @@
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { evaluationGraph } from '../ai/evaluationGraph.js';
+import { generateQuestionNode } from '../ai/agents/questionGenerator.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import Session from '../models/Session.js';
 
 /**
- * @desc    Generate the next AI interview question using the LangGraph pipeline
+ * @desc    Generate the next AI interview question using the LLM agent
  * @route   POST /api/questions/generate
  * @access  Private
  */
@@ -30,23 +30,13 @@ export const generateQuestion = asyncHandler(async (req, res) => {
         q.feedback.actionableTip || (q.feedback.improvements && q.feedback.improvements[0]) || '',
     }));
 
-  const config = { configurable: { thread_id: sessionId } };
-
-  // Trigger the start of the LangGraph pipeline
-  // This runs `generateQuestionNode` and then pauses precisely at our `interruptBefore` breakpoint
-  const result = await evaluationGraph.invoke(
-    {
-      userId: req.user.id,
-      role,
-      questionType,
-      sessionHistory,
-      // Reset runtime fields for the new question cycle
-      transcript: '',
-      wordTimestamps: [],
-      questionText: '',
-    },
-    config
-  );
+  // Trigger the LLM generation node directly (stateless)
+  const result = await generateQuestionNode({
+    userId: req.user.id,
+    role,
+    questionType,
+    sessionHistory,
+  });
 
   // Extract the generated question from the paused graph state
   if (!result.questionText) {

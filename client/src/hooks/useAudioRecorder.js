@@ -94,6 +94,14 @@ const useAudioRecorder = () => {
     };
   }, []);
 
+  const resetRecording = useCallback(() => {
+    setIsRecording(false);
+    setIsPaused(false);
+    setRecordingTime(0);
+    setAudioBlob(null);
+    clearInterval(timerInterval.current);
+  }, []);
+
   return {
     isRecording,
     isPaused,
@@ -103,6 +111,7 @@ const useAudioRecorder = () => {
     stopRecording,
     pauseRecording,
     resumeRecording,
+    resetRecording,
   };
 };
 

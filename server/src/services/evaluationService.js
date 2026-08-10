@@ -37,28 +37,15 @@ class EvaluationService {
         a: q.transcript,
       }));
 
-    // 3. Inject the context into the graph state and invoke the pipeline.
-    // If the graph was paused at the `interruptBefore` breakpoint (waiting for audio),
-    // passing this new state will prime it for resumption.
-    let result = await evaluationGraph.invoke(
-      {
-        role: session.role,
-        questionType: questionAttempt.questionType,
-        questionText: questionAttempt.questionText,
-        transcript,
-        wordTimestamps,
-        sessionHistory,
-      },
-      config
-    );
-
-    // Check if the graph paused at the interrupt (before the parallel evaluators).
-    // If it did, we immediately resume it by passing `null`, which tells LangGraph
-    // to continue execution using the state we just injected above.
-    const currentState = await evaluationGraph.getState(config);
-    if (currentState.next && currentState.next.length > 0) {
-      result = await evaluationGraph.invoke(null, config);
-    }
+    // 3. Inject the context into the graph state and invoke the pipeline statelessly.
+    const result = await evaluationGraph.invoke({
+      role: session.role,
+      questionType: questionAttempt.questionType,
+      questionText: questionAttempt.questionText,
+      transcript,
+      wordTimestamps,
+      sessionHistory,
+    });
 
     // 4. Extract the cleanly computed evaluations from the final LangGraph state
     const { contentEvaluation, deliveryEvaluation, coachingReport } = result;

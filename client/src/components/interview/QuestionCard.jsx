@@ -98,9 +98,10 @@ const QuestionCard = ({ question, index, total, isActive, onTimeUp, isLoading })
             </motion.div>
           ) : (
             <motion.h2
-              key={question?.text}
+              key={question?.text || 'empty'}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
               className="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed font-display"
             >
               {question?.text}

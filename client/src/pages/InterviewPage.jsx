@@ -60,6 +60,7 @@ const InterviewPage = () => {
     stopRecording,
     pauseRecording,
     resumeRecording,
+    resetRecording,
   } = useAudioRecorder();
 
   // Redirect on error
@@ -183,8 +184,9 @@ const InterviewPage = () => {
       setFlowState(FLOW_STATES.IDLE);
       setCurrentQuestionData(null); // will trigger fetchNextQuestion
       setEvaluationResult(null);
+      resetRecording(); // Reset audio controls and blob for the next question
     }
-  }, [dispatch, currentQuestionIndex, totalQuestions, sessionId]);
+  }, [dispatch, currentQuestionIndex, totalQuestions, sessionId, resetRecording]);
 
   if (isRestoring) {
     return (
