@@ -47,6 +47,7 @@ const RoleSelectionPage = () => {
           sessionId: response.data._id,
           role: selectedRole.id,
           questions: response.data.questions || [],
+          totalQuestions: response.data.totalQuestions || questionCount,
         })
       );
 

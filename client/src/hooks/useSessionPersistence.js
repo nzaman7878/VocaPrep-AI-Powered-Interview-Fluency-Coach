@@ -47,6 +47,7 @@ const useSessionPersistence = (sessionId) => {
               sessionId: response.data._id,
               role: response.data.role,
               questions: response.data.questions || [],
+              totalQuestions: response.data.totalQuestions,
             })
           );
         }
