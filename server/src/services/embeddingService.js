@@ -9,7 +9,7 @@ class EmbeddingService {
   constructor() {
     this.embeddings = new GoogleGenerativeAIEmbeddings({
       apiKey: env.GEMINI_API_KEY,
-      modelName: 'text-embedding-004',
+      modelName: 'gemini-embedding-2',
     });
 
     this.collection = null;

@@ -14,6 +14,17 @@ export const Navbar = () => {
     dispatch(logout());
   };
 
+  const handleScrollTo = (e, id) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `/#${id}`);
+      }
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-lg bg-background/80 border-b border-surface-elevated">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -42,12 +53,14 @@ export const Navbar = () => {
         <nav className="hidden md:flex items-center gap-6">
           <Link
             to="/#features"
+            onClick={(e) => handleScrollTo(e, 'features')}
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             Features
           </Link>
           <Link
             to="/#how-it-works"
+            onClick={(e) => handleScrollTo(e, 'how-it-works')}
             className="text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             How it Works
