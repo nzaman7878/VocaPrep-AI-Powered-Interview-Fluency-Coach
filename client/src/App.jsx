@@ -13,6 +13,7 @@ const RoleSelectionPage = lazy(() => import('./pages/RoleSelectionPage'));
 const InterviewPage = lazy(() => import('./pages/InterviewPage'));
 const SessionSummaryPage = lazy(() => import('./pages/SessionSummaryPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
@@ -49,6 +50,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
               {/* Protected Routes */}
               <Route
