@@ -104,25 +104,25 @@ const RoleSelectionPage = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col sm:flex-row items-center justify-between p-8 bg-surface border border-surface-elevated rounded-3xl shadow-xl"
+            className="flex flex-col sm:flex-row items-center justify-between p-8 md:p-10 glass-panel shadow-premium rounded-3xl"
           >
-            <div className="mb-6 sm:mb-0">
-              <h4 className="text-lg font-bold text-text-primary mb-1">Session Settings</h4>
+            <div className="mb-6 sm:mb-0 text-center sm:text-left">
+              <h4 className="text-xl font-display font-bold text-text-primary mb-2">Session Settings</h4>
               <p className="text-sm text-text-muted">Configure your specific parameters.</p>
             </div>
 
-            <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-4 sm:gap-6">
-              <div className="flex items-center justify-between sm:justify-start gap-4 bg-background p-2 rounded-2xl border border-surface-elevated">
-                <span className="text-sm font-medium text-text-primary pl-2">Questions:</span>
-                <div className="flex bg-surface rounded-xl shadow-sm overflow-hidden border border-surface-elevated">
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto items-stretch sm:items-center gap-6">
+              <div className="flex items-center justify-between sm:justify-start gap-4 bg-surface/50 p-2 rounded-2xl border border-surface-elevated shadow-sm backdrop-blur-sm">
+                <span className="text-sm font-medium text-text-primary pl-3">Questions:</span>
+                <div className="flex gap-1">
                   {[3, 5, 7].map((num) => (
                     <button
                       key={num}
                       onClick={() => setQuestionCount(num)}
-                      className={`px-4 py-2 text-sm font-bold transition-colors ${
+                      className={`px-4 py-2 text-sm font-bold rounded-xl transition-all duration-200 ${
                         questionCount === num
-                          ? 'bg-primary text-white'
-                          : 'text-text-muted hover:bg-surface-elevated'
+                          ? 'bg-primary text-white shadow-md shadow-primary/20 scale-105'
+                          : 'text-text-muted hover:bg-surface-elevated hover:text-text-primary'
                       }`}
                     >
                       {num}
@@ -136,7 +136,8 @@ const RoleSelectionPage = () => {
                 isLoading={isStarting}
                 disabled={!selectedRole || isStarting}
                 size="lg"
-                className="w-full sm:w-auto px-10"
+                variant="primary"
+                className="w-full sm:w-auto px-10 shadow-lg shadow-primary/20 hover:shadow-primary/40"
               >
                 Launch Interview
               </Button>
