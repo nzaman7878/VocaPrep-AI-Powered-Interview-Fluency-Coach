@@ -171,8 +171,8 @@ export const Navbar = () => {
               <path d="M12 2v20M17 5v14M7 5v14M22 10v4M2 10v4" />
             </svg>
           </div>
-          <span className="font-display font-bold text-2xl tracking-tight text-text-primary">
-            Voca<span className="text-primary">Prep</span>
+          <span className="font-display font-bold text-2xl tracking-tight text-text-primary group-hover:text-primary transition-colors duration-300">
+            Voca<span className="text-primary group-hover:text-secondary transition-colors duration-300">Prep</span>
           </span>
         </Link>
 
@@ -199,7 +199,7 @@ export const Navbar = () => {
           {isAuthenticated ? (
             <div className="flex items-center gap-6">
               <Link to="/role-selection">
-                <Button variant="primary" size="sm" className="shadow-lg shadow-primary/20 flex items-center gap-2 rounded-full px-5">
+                <Button variant="primary" size="sm" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all flex items-center gap-2 rounded-full px-5">
                   <Mic className="w-4 h-4" />
                   <span>Practice Now</span>
                 </Button>
@@ -215,7 +215,7 @@ export const Navbar = () => {
                 </Button>
               </Link>
               <Link to="/register">
-                <Button variant="primary" size="sm" className="shadow-lg shadow-primary/20 rounded-full px-6 font-semibold">
+                <Button variant="primary" size="sm" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all rounded-full px-6 font-semibold">
                   Get Started
                 </Button>
               </Link>
