@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../ui/Button';
 import { Mic } from 'lucide-react';
@@ -17,6 +17,10 @@ export const HeroSection = () => {
     blobRef.current.style.left = `${x}%`;
     blobRef.current.style.top = `${y}%`;
   };
+
+  const waveformHeights = useMemo(() => {
+    return [...Array(7)].map(() => 30 + Math.random() * 70);
+  }, []);
 
   return (
     <section
@@ -39,7 +43,7 @@ export const HeroSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Text */}
           <div className="flex flex-col items-start space-y-8">
-            <div className="inline-flex items-center px-3 py-1 rounded-sm bg-surface-elevated border border-white/5 text-sm font-mono text-secondary shadow-sm">
+            <div className="inline-flex items-center px-3 py-1 rounded-sm bg-surface-elevated border border-surface-elevated text-sm font-mono text-secondary shadow-sm">
               <span className="w-2 h-2 rounded-full bg-secondary mr-2 animate-pulse" />
               AI-Powered Interview Coach
             </div>
@@ -74,16 +78,16 @@ export const HeroSection = () => {
             {/* Abstract Waveform Visual */}
             <div className="absolute inset-0 bg-waveform-motif rounded-3xl opacity-30" />
 
-            <div className="relative w-64 h-64 bg-surface rounded-full flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
+            <div className="relative w-64 h-64 bg-surface rounded-full flex items-center justify-center border border-surface-elevated shadow-premium overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10" />
 
               <div className="flex items-center gap-2">
-                {[...Array(7)].map((_, i) => (
+                {waveformHeights.map((height, i) => (
                   <div
                     key={i}
                     className="w-3 bg-primary rounded-full animate-waveform"
                     style={{
-                      height: `${30 + Math.random() * 70}%`,
+                      height: `${height}%`,
                       animationDelay: `${i * 0.15}s`,
                     }}
                   />
@@ -91,8 +95,8 @@ export const HeroSection = () => {
               </div>
 
               {/* Central Mic Icon overlay */}
-              <div className="absolute bg-background/50 backdrop-blur-md p-4 rounded-full border border-white/10">
-                <Mic className="w-8 h-8 text-white" />
+              <div className="absolute glass-panel p-4 rounded-full">
+                <Mic className="w-8 h-8 text-primary" />
               </div>
             </div>
           </div>

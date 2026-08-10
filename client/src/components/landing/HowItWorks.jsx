@@ -50,12 +50,12 @@ export const HowItWorks = () => {
             return (
               <div key={idx} className="relative z-10 flex flex-col items-center transition-transform duration-500 hover:-translate-y-2">
                 {/* Number Badge */}
-                <div className={`w-16 h-16 rounded-full ${step.bg} ${step.color} border border-white/5 shadow-lg flex items-center justify-center mb-6 relative group overflow-hidden`}>
+                <div className={`w-16 h-16 rounded-full ${step.bg} ${step.color} border border-surface-elevated shadow-premium flex items-center justify-center mb-6 relative group overflow-hidden`}>
                   <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <span className="font-display font-bold text-2xl">{step.number}</span>
                 </div>
                 
-                <Card className="w-full h-full bg-surface/50 backdrop-blur-sm border-white/5 hover:border-white/10 overflow-hidden text-center">
+                <Card className="w-full h-full glass-panel overflow-hidden text-center hover:shadow-premium transition-all">
                   <CardContent className="p-8">
                     <div className="flex justify-center mb-4">
                       <Icon className={`w-8 h-8 ${step.color} opacity-80`} />

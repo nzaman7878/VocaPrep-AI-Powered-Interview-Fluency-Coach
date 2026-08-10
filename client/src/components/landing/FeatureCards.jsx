@@ -54,7 +54,7 @@ export const FeatureCards = () => {
                 key={idx}
                 className={`transition-transform duration-500 hover:-translate-y-2 ${feature.offset}`}
               >
-                <Card className="h-full bg-surface/50 backdrop-blur-sm border-white/5 hover:border-white/10 overflow-hidden group">
+                <Card className="h-full glass-panel overflow-hidden group hover:shadow-premium transition-shadow">
                   <CardContent className="p-8 flex flex-col h-full relative">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/5 to-transparent rounded-bl-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
 
