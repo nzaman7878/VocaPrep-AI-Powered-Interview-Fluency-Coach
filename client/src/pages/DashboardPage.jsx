@@ -31,20 +31,23 @@ const DashboardPage = () => {
     useSelector((state) => state.progress);
 
   const [sessions, setSessions] = useState([]);
+  const [weakAreas, setWeakAreas] = useState([]);
 
   // Fetch data
   const fetchDataFn = useCallback(async () => { console.log('fetchDataFn running');
     dispatch(setProgressLoading());
 
-    const [summaryData, snapshotsData, sessionsData] = await Promise.all([
+    const [summaryData, snapshotsData, sessionsData, weakAreasData] = await Promise.all([
       progressApi.getProgressSummary(),
       progressApi.getProgressSnapshots({ limit: 50 }),
       sessionApi.getSessions({ limit: 100 }), // fetch all for pagination on client side
+      progressApi.getWeakAreas({ limit: 3 })
     ]);
 
     const summary = summaryData.data || summaryData;
     const historyList = snapshotsData.data || snapshotsData;
     const sessionList = sessionsData.data?.sessions || [];
+    const weakAreasList = weakAreasData.data || [];
 
     dispatch(
       setProgressData({
@@ -70,6 +73,7 @@ const DashboardPage = () => {
     });
 
     setSessions(enrichedSessions);
+    setWeakAreas(weakAreasList);
   }, [dispatch]);
 
   const {
@@ -166,7 +170,7 @@ const DashboardPage = () => {
           {/* Side Column */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             <div className="flex-1 min-h-[400px]">
-              <WeakAreasCard weakAreas={[]} />
+              <WeakAreasCard weakAreas={weakAreas} />
             </div>
           </div>
         </div>

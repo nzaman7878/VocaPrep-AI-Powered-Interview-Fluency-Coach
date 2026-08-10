@@ -20,4 +20,14 @@ export const progressApi = {
     const response = await axiosClient.get('/progress', { params });
     return response.data;
   },
+
+  /**
+   * Fetches the user's weakest topics dynamically retrieved via Vector similarity search
+   * @param {Object} params - Query parameters (e.g., ?limit=3)
+   * @returns {Promise<Object>} API response data
+   */
+  getWeakAreas: async (params = {}) => {
+    const response = await axiosClient.get('/progress/weak-areas', { params });
+    return response.data;
+  },
 };

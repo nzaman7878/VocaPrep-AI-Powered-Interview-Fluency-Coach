@@ -151,7 +151,7 @@ export const completeSession = asyncHandler(async (req, res) => {
     // Fire and forget auto-embedding for RAG personalization
     Promise.all(
       session.questions
-        .filter((q) => q.status === 'completed')
+        .filter((q) => q.contentScore !== undefined)
         .map((q) => embeddingService.embedQuestionAttempt(session, q))
     ).catch((err) => console.error('Failed to embed session questions:', err));
   }
