@@ -100,6 +100,18 @@ export const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogoClick = (e) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Clean up hash if present
+      if (window.location.hash) {
+        window.history.pushState(null, '', '/');
+      }
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   // Handle scroll state for navbar styling
   useEffect(() => {
     const handleScroll = () => {
@@ -142,7 +154,7 @@ export const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6 h-20 flex items-center justify-between relative">
         
         {/* Left: Logo */}
-        <Link to="/" className="flex items-center gap-3 group z-10">
+        <Link to="/" onClick={handleLogoClick} className="flex items-center gap-3 group z-10">
           {/* Logo motif */}
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary relative overflow-hidden transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105">
             <div className="absolute inset-0 bg-waveform-motif opacity-50" />
