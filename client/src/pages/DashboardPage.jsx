@@ -49,17 +49,20 @@ const DashboardPage = () => {
     const sessionList = sessionsData.data?.sessions || [];
     const weakAreasList = weakAreasData.data || [];
 
+    // Scale scores out of 10 to out of 100 for consistency in dashboard charts
+    const scaledHistoryList = historyList.map((snap, i) => ({
+      name: `S${i + 1}`,
+      wpm: snap.avgWpm || 0,
+      fillerCount: snap.avgFillerRate || 0,
+      contentScore: (snap.avgContentScore || 0) * 10,
+    }));
+
     dispatch(
       setProgressData({
         totalSessions: summary.totalSessions || 0,
-        averageScore: summary.avgContentScore || 0,
-        totalPracticeTimeSeconds: 0,
-        history: historyList.map((snap, i) => ({
-          name: `S${i + 1}`,
-          wpm: snap.avgWpm || 0,
-          fillerCount: snap.avgFillerRate || 0, // Using rate as count for demo
-          contentScore: snap.avgContentScore || 0,
-        })),
+        averageScore: (summary.avgContentScore || 0) * 10,
+        totalPracticeTimeSeconds: (summary.totalQuestions || 0) * 120, // 2 minutes per question rough estimation
+        history: scaledHistoryList,
       })
     );
 
@@ -67,7 +70,7 @@ const DashboardPage = () => {
     const enrichedSessions = sessionList.map((session) => {
       const snap = historyList.find((h) => h.sessionId === session._id);
       if (snap) {
-        return { ...session, averageContentScore: Math.round(snap.avgContentScore) || 0 };
+        return { ...session, averageContentScore: Math.round((snap.avgContentScore || 0) * 10) };
       }
       return session;
     });
@@ -93,6 +96,15 @@ const DashboardPage = () => {
 
   const avgWpm = React.useMemo(() => {
     return history.length > 0 ? history.reduce((sum, h) => sum + h.wpm, 0) / history.length : 0;
+  }, [history]);
+
+  const improvement = React.useMemo(() => {
+    if (history.length < 2) return 0;
+    const recentScore = history[history.length - 1].contentScore;
+    const previousScores = history.slice(0, -1).map((h) => h.contentScore);
+    const previousAvg = previousScores.reduce((a, b) => a + b, 0) / previousScores.length;
+    if (previousAvg === 0) return 0;
+    return Math.round(((recentScore - previousAvg) / previousAvg) * 100);
   }, [history]);
 
   if (isFetching || isLoading) {
@@ -150,7 +162,7 @@ const DashboardPage = () => {
             totalSessions={totalSessions}
             averageWpm={Math.round(avgWpm)}
             bestContentScore={Math.round(bestScore)}
-            improvement={0} // Can implement actual improvement calculation later
+            improvement={improvement}
           />
         </div>
 

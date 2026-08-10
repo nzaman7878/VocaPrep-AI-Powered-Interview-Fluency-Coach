@@ -60,12 +60,12 @@ const WeakAreasCard = ({ weakAreas = [] }) => {
               </h4>
               <span
                 className={`shrink-0 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider ${
-                  area.score < 50
+                  (area.score || 0) < 5
                     ? 'bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20'
                     : 'bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20'
                 }`}
               >
-                Score: {area.score || 0}
+                Score: {Math.round((area.score || 0) * 10)}
               </span>
             </div>
             <p className="text-sm text-text-muted line-clamp-3">
