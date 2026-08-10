@@ -116,23 +116,23 @@ const DashboardPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-black text-text-primary font-display tracking-tight mb-2">
+            <h1 className="text-4xl font-black text-text-primary font-display tracking-tight mb-2">
               Your Progress Dashboard
             </h1>
-            <p className="text-text-muted text-lg">
+            <p className="text-text-muted text-lg font-medium">
               Track your interview fluency and improvement over time.
             </p>
           </div>
           <button
             onClick={() => navigate('/role-selection')}
-            className="inline-flex items-center justify-center bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-hover transition-colors shadow-md shadow-primary/20"
+            className="inline-flex items-center justify-center bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-premium hover:-translate-y-1"
           >
             Start New Interview
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </button>
         </div>
@@ -146,20 +146,28 @@ const DashboardPage = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Bento Box Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          {/* Main Charts Column */}
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[400px]">
               <ContentScoreTrendChart data={history} />
               <WpmTrendChart data={history} />
             </div>
-            <FillerRateTrendChart data={history} />
+            <div className="h-[320px]">
+              <FillerRateTrendChart data={history} />
+            </div>
           </div>
-          <div className="lg:col-span-1">
-            <WeakAreasCard weakAreas={[]} /> {/* Empty for now until frontend fetches RAG data */}
+          
+          {/* Side Column */}
+          <div className="lg:col-span-4 flex flex-col gap-6">
+            <div className="flex-1 min-h-[400px]">
+              <WeakAreasCard weakAreas={[]} />
+            </div>
           </div>
         </div>
 
-        <div>
+        <div className="mt-12">
           <SessionHistoryList sessions={sessions} />
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
 import Button from '../ui/Button';
+import ThemeToggle from '../ui/ThemeToggle';
 
 export const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -68,6 +69,9 @@ export const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <div className="h-4 w-px bg-surface-elevated hidden sm:block" />
+          
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
               <Link

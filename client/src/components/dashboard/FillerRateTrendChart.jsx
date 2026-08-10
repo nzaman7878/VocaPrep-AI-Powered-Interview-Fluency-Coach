@@ -12,10 +12,10 @@ import {
 const FillerRateTrendChart = ({ data = [] }) => {
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm h-80 flex flex-col items-center justify-center">
-        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+      <div className="glass-panel rounded-3xl p-6 h-full flex flex-col items-center justify-center min-h-[300px]">
+        <div className="w-16 h-16 bg-surface-elevated rounded-full flex items-center justify-center mb-4">
           <svg
-            className="w-8 h-8 text-slate-300"
+            className="w-8 h-8 text-text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -24,21 +24,21 @@ const FillerRateTrendChart = ({ data = [] }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
             />
           </svg>
         </div>
-        <p className="text-slate-500 font-medium">Complete more interviews to unlock trends.</p>
+        <p className="text-text-muted font-medium">Complete more interviews to unlock trends.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm h-80 flex flex-col">
+    <div className="glass-panel rounded-3xl p-6 h-full flex flex-col min-h-[300px]">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h3 className="text-lg font-bold text-slate-800 font-display">Filler Word Trend</h3>
-          <p className="text-sm text-slate-500">Total filler words per session</p>
+          <h3 className="text-lg font-bold text-text-primary font-display">Filler Word Usage Trend</h3>
+          <p className="text-sm text-text-muted">Percentage of filler words vs total words</p>
         </div>
       </div>
 

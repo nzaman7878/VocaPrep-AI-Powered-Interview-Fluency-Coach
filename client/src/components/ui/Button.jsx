@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Button = forwardRef(
   (
@@ -17,15 +18,15 @@ const Button = forwardRef(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-display font-medium transition-all duration-200 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed rounded-md';
+      'inline-flex items-center justify-center font-display font-medium transition-colors outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed rounded-lg relative overflow-hidden';
 
     const variants = {
       primary:
-        'bg-primary text-white hover:bg-opacity-90 focus:ring-primary shadow-lg shadow-primary/20 hover:-translate-y-0.5',
+        'bg-primary text-white hover:bg-primary/90 focus:ring-primary shadow-premium',
       secondary:
-        'bg-surface-elevated text-text-primary hover:bg-opacity-80 focus:ring-surface-elevated border border-white/5 hover:-translate-y-0.5',
+        'glass-panel text-text-primary hover:bg-surface-elevated focus:ring-surface-elevated',
       accent:
-        'bg-accent text-white hover:bg-opacity-90 focus:ring-accent shadow-lg shadow-accent/20 hover:-translate-y-0.5',
+        'bg-accent text-white hover:bg-accent/90 focus:ring-accent shadow-premium',
       outline:
         'bg-transparent text-text-primary border border-surface-elevated hover:bg-surface-elevated focus:ring-surface-elevated',
       ghost:
@@ -41,19 +42,22 @@ const Button = forwardRef(
     };
 
     return (
-      <button
+      <motion.button
         ref={ref}
         disabled={disabled || isLoading}
         aria-disabled={disabled || isLoading}
         aria-busy={isLoading}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+        whileHover={{ scale: disabled || isLoading ? 1 : 1.02 }}
+        whileTap={{ scale: disabled || isLoading ? 1 : 0.98 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         {...props}
       >
         {isLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
         {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
         {children}
         {!isLoading && rightIcon && <span className="ml-2">{rightIcon}</span>}
-      </button>
+      </motion.button>
     );
   }
 );

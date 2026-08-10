@@ -1,9 +1,9 @@
 import React from 'react';
 
 const StatCard = ({ title, value, subtitle, trend, trendLabel, icon }) => (
-  <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+  <div className="glass-panel rounded-3xl p-6 flex flex-col justify-between hover:shadow-premium transition-all hover:-translate-y-1">
     <div className="flex justify-between items-start mb-4">
-      <div className="p-3 bg-slate-50 rounded-2xl">{icon}</div>
+      <div className="p-3 bg-primary/10 text-primary rounded-2xl">{icon}</div>
       {trend && (
         <div
           className={`px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 ${

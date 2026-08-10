@@ -39,18 +39,18 @@ const QuestionCard = ({ question, index, total, isActive, onTimeUp, isLoading })
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl shadow-slate-100/50 relative overflow-hidden"
+      className="glass-panel rounded-3xl p-8 lg:p-12 shadow-premium relative overflow-hidden"
     >
       <div className="flex justify-between items-start mb-8">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 font-bold rounded-2xl font-display text-xl border border-indigo-100 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center w-14 h-14 bg-primary/10 text-primary font-bold rounded-2xl font-display text-2xl border border-primary/20 shadow-sm">
             {index + 1}
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <span className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1">
               Progress
             </span>
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-sm font-medium text-text-primary">
               Question {index + 1} of {total}
             </span>
           </div>
@@ -64,8 +64,8 @@ const QuestionCard = ({ question, index, total, isActive, onTimeUp, isLoading })
           <div
             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono font-bold text-lg transition-colors ${
               isLowTime && !isLoading
-                ? 'bg-red-50 text-red-600 border border-red-100 shadow-sm'
-                : 'bg-slate-50 text-slate-700 border border-slate-200 shadow-sm'
+                ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 shadow-sm'
+                : 'bg-surface border border-surface-elevated text-text-primary shadow-sm'
             }`}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,10 +89,10 @@ const QuestionCard = ({ question, index, total, isActive, onTimeUp, isLoading })
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center gap-4 text-slate-400"
+              className="flex items-center gap-4 text-text-muted"
             >
-              <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-              <span className="text-lg font-medium">
+              <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-xl font-medium">
                 Our AI is generating your next question...
               </span>
             </motion.div>
@@ -102,7 +102,7 @@ const QuestionCard = ({ question, index, total, isActive, onTimeUp, isLoading })
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="text-2xl md:text-3xl font-bold text-slate-800 leading-relaxed font-display"
+              className="text-3xl md:text-4xl font-black text-text-primary leading-tight font-display tracking-tight"
             >
               {question?.text}
             </motion.h2>

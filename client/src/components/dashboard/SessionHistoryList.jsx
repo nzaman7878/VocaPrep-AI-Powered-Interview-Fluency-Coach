@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../ui/Button';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -9,10 +10,10 @@ const SessionHistoryList = ({ sessions = [] }) => {
 
   if (!sessions || sessions.length === 0) {
     return (
-      <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm text-center">
-        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="glass-panel rounded-3xl p-8 text-center">
+        <div className="w-16 h-16 bg-surface-elevated rounded-full flex items-center justify-center mx-auto mb-4">
           <svg
-            className="w-8 h-8 text-slate-300"
+            className="w-8 h-8 text-text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -25,14 +26,11 @@ const SessionHistoryList = ({ sessions = [] }) => {
             />
           </svg>
         </div>
-        <h3 className="text-lg font-bold text-slate-800 mb-2">No Past Sessions</h3>
-        <p className="text-slate-500 mb-6">You haven't completed any interviews yet.</p>
-        <button
-          onClick={() => navigate('/role-selection')}
-          className="bg-indigo-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-indigo-700 transition-colors shadow-sm"
-        >
+        <h3 className="text-lg font-bold text-text-primary mb-2">No Past Sessions</h3>
+        <p className="text-text-muted mb-6">You haven't completed any interviews yet.</p>
+        <Button onClick={() => navigate('/role-selection')} variant="primary">
           Start an Interview
-        </button>
+        </Button>
       </div>
     );
   }
@@ -55,36 +53,36 @@ const SessionHistoryList = ({ sessions = [] }) => {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-        <h3 className="text-xl font-bold text-slate-800 font-display">Recent Interviews</h3>
-        <span className="text-sm font-medium text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
+    <div className="glass-panel rounded-3xl overflow-hidden flex flex-col">
+      <div className="p-6 border-b border-surface-elevated flex justify-between items-center bg-surface/50">
+        <h3 className="text-xl font-bold text-text-primary font-display">Recent Interviews</h3>
+        <span className="text-sm font-medium text-text-muted bg-surface-elevated px-3 py-1 rounded-full border border-surface-elevated">
           {sessions.length} Total
         </span>
       </div>
 
-      <div className="divide-y divide-slate-100">
+      <div className="divide-y divide-surface-elevated flex-1">
         {paginatedSessions.map((session) => (
           <div
             key={session._id}
-            className="p-6 hover:bg-slate-50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="p-6 hover:bg-surface-elevated/50 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group"
           >
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <h4 className="font-bold text-slate-800 text-lg capitalize">
+                <h4 className="font-bold text-text-primary text-lg capitalize group-hover:text-primary transition-colors">
                   {session.role.replace('-', ' ')}
                 </h4>
                 {session.status === 'completed' ? (
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
                     Completed
                   </span>
                 ) : (
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
                     Incomplete
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-4 text-sm text-slate-500">
+              <div className="flex items-center gap-4 text-sm text-text-muted">
                 <div className="flex items-center gap-1.5">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -113,17 +111,17 @@ const SessionHistoryList = ({ sessions = [] }) => {
             <div className="flex items-center gap-6">
               {session.status === 'completed' && session.averageContentScore && (
                 <div className="text-center">
-                  <div className="text-2xl font-black text-indigo-600">
+                  <div className="text-2xl font-black text-primary">
                     {session.averageContentScore}
                   </div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <div className="text-xs font-semibold text-text-muted uppercase tracking-wider">
                     Avg Score
                   </div>
                 </div>
               )}
               <button
                 onClick={() => navigate(`/summary/${session._id}`)}
-                className="flex items-center gap-2 text-indigo-600 font-semibold hover:text-indigo-800 transition-colors"
+                className="flex items-center gap-2 text-primary font-semibold hover:text-primary-hover transition-colors"
               >
                 View
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,19 +139,19 @@ const SessionHistoryList = ({ sessions = [] }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="p-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
-          <p className="text-sm text-slate-500 font-medium ml-2">
-            Showing <span className="text-slate-800">{startIndex + 1}</span> to{' '}
-            <span className="text-slate-800">
+        <div className="p-4 border-t border-surface-elevated flex items-center justify-between bg-surface/50">
+          <p className="text-sm text-text-muted font-medium ml-2">
+            Showing <span className="text-text-primary">{startIndex + 1}</span> to{' '}
+            <span className="text-text-primary">
               {Math.min(startIndex + ITEMS_PER_PAGE, sessions.length)}
             </span>{' '}
-            of <span className="text-slate-800">{sessions.length}</span>
+            of <span className="text-text-primary">{sessions.length}</span>
           </p>
           <div className="flex gap-2">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors bg-white shadow-sm"
+              className="p-2 rounded-lg border border-surface-elevated text-text-primary hover:bg-surface-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors bg-surface shadow-sm"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -167,7 +165,7 @@ const SessionHistoryList = ({ sessions = [] }) => {
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors bg-white shadow-sm"
+              className="p-2 rounded-lg border border-surface-elevated text-text-primary hover:bg-surface-elevated disabled:opacity-50 disabled:cursor-not-allowed transition-colors bg-surface shadow-sm"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path

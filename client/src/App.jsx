@@ -16,6 +16,8 @@ const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
+import { ThemeProvider } from './context/ThemeContext';
+
 function App() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -33,61 +35,63 @@ function App() {
   }, [dispatch, user]);
 
   return (
-    <ErrorBoundary>
-      <Router>
-        <Suspense
-          fallback={
-            <div className="flex h-screen w-full items-center justify-center bg-background">
-              <Spinner size="lg" />
-            </div>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+    <ThemeProvider>
+      <ErrorBoundary>
+        <Router>
+          <Suspense
+            fallback={
+              <div className="flex h-screen w-full items-center justify-center bg-background">
+                <Spinner size="lg" />
+              </div>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
-            {/* Protected Routes */}
-            <Route
-              path="/role-selection"
-              element={
-                <ProtectedRoute>
-                  <RoleSelectionPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/interview/:sessionId"
-              element={
-                <ProtectedRoute>
-                  <InterviewPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/summary/:sessionId"
-              element={
-                <ProtectedRoute>
-                  <SessionSummaryPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <DashboardPage />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes */}
+              <Route
+                path="/role-selection"
+                element={
+                  <ProtectedRoute>
+                    <RoleSelectionPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/interview/:sessionId"
+                element={
+                  <ProtectedRoute>
+                    <InterviewPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/summary/:sessionId"
+                element={
+                  <ProtectedRoute>
+                    <SessionSummaryPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <DashboardPage />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Error Pages */}
-            <Route path="/error" element={<ErrorPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </Router>
-    </ErrorBoundary>
+              {/* Error Pages */}
+              <Route path="/error" element={<ErrorPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </Router>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
 }
 

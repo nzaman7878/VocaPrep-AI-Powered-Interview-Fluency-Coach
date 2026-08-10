@@ -7,10 +7,10 @@ export const CTASection = () => {
       <div className="absolute inset-0 bg-waveform-motif opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl mx-auto bg-surface-elevated border border-white/10 rounded-2xl p-12 text-center shadow-2xl relative overflow-hidden">
+        <div className="max-w-3xl mx-auto glass-panel rounded-2xl p-12 text-center shadow-premium relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-accent" />
 
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-white">
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-text-primary">
             Ready to ace your next interview?
           </h2>
 
