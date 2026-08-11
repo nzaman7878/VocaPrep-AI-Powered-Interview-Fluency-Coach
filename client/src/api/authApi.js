@@ -1,20 +1,11 @@
 import axiosClient from './axiosClient';
 
 /**
- * Register a new user
- * @param {Object} userData - { name, email, password, targetRole }
+ * Authenticate with Google
+ * @param {string} credential - Google ID token
  */
-export const registerUser = async (userData) => {
-  const response = await axiosClient.post('/auth/register', userData);
-  return response.data;
-};
-
-/**
- * Login a user
- * @param {Object} credentials - { email, password }
- */
-export const loginUser = async (credentials) => {
-  const response = await axiosClient.post('/auth/login', credentials);
+export const googleAuth = async (credential) => {
+  const response = await axiosClient.post('/auth/google', { credential });
   return response.data;
 };
 

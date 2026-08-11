@@ -22,10 +22,13 @@ const userSchema = new mongoose.Schema(
         'Please provide a valid email address',
       ],
     },
-    passwordHash: {
+    googleId: {
       type: String,
-      required: [true, 'Password is required'],
-      select: false, // Don't return password by default
+      unique: true,
+      sparse: true,
+    },
+    picture: {
+      type: String,
     },
     avatar: {
       type: String,
@@ -45,21 +48,5 @@ const userSchema = new mongoose.Schema(
     timestamps: true, // Automatically adds createdAt and updatedAt
   }
 );
-
-// Hash the password before saving
-userSchema.pre('save', async function () {
-  // Only run this function if password was modified
-  if (!this.isModified('passwordHash')) {
-    return;
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
-});
-
-// Instance method to check if password is correct
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.passwordHash);
-};
 
 export const User = mongoose.model('User', userSchema);

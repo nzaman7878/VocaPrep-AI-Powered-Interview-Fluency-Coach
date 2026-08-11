@@ -32,4 +32,5 @@ export const env = {
   CLOUDINARY_URL: process.env.CLOUDINARY_URL,
   CHROMA_URL: process.env.CHROMA_URL || 'http://localhost:8000',
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 };

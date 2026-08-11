@@ -1,20 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, registerUser, getUserProfile } from '../../api/authApi.js';
+import { googleAuth, getUserProfile } from '../../api/authApi.js';
 
 // Async Thunks
-export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
+export const googleLogin = createAsyncThunk('auth/googleLogin', async (credential, thunkAPI) => {
   try {
-    const data = await loginUser(credentials);
-    return data;
-  } catch (error) {
-    const message = error.response?.data?.message || error.message;
-    return thunkAPI.rejectWithValue(message);
-  }
-});
-
-export const register = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
-  try {
-    const data = await registerUser(userData);
+    const data = await googleAuth(credential);
     return data;
   } catch (error) {
     const message = error.response?.data?.message || error.message;
@@ -59,12 +49,12 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login
-      .addCase(login.pending, (state) => {
+      // Google Login
+      .addCase(googleLogin.pending, (state) => {
         state.status = 'loading';
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(googleLogin.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload.data.user;
         state.accessToken = action.payload.data.accessToken;
@@ -72,24 +62,7 @@ const authSlice = createSlice({
         localStorage.setItem('accessToken', state.accessToken);
         localStorage.setItem('refreshToken', state.refreshToken);
       })
-      .addCase(login.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-      // Register
-      .addCase(register.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
-      .addCase(register.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload.data.user;
-        state.accessToken = action.payload.data.accessToken;
-        state.refreshToken = action.payload.data.refreshToken;
-        localStorage.setItem('accessToken', state.accessToken);
-        localStorage.setItem('refreshToken', state.refreshToken);
-      })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(googleLogin.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })

@@ -3,87 +3,60 @@ import { generateAuthTokens } from '../services/tokenService.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiError } from '../utils/ApiError.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { OAuth2Client } from 'google-auth-library';
+import { env } from '../config/env.js';
+
+const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 
 /**
- * @desc    Register a new user
- * @route   POST /api/auth/register
+ * @desc    Authenticate with Google OAuth
+ * @route   POST /api/auth/google
  * @access  Public
  */
-export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, targetRole } = req.body;
+export const googleAuth = asyncHandler(async (req, res) => {
+  const { credential } = req.body;
 
-  if (!name || !email || !password) {
-    throw new ApiError(400, 'Please provide name, email, and password');
+  if (!credential) {
+    throw new ApiError(400, 'Google ID token is required');
   }
+
+  let payload;
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: env.GOOGLE_CLIENT_ID,
+    });
+    payload = ticket.getPayload();
+  } catch (error) {
+    throw new ApiError(401, 'Invalid Google token');
+  }
+
+  const { sub: googleId, email, name, picture } = payload;
 
   // Check if user exists
-  const userExists = await User.findOne({ email });
-
-  if (userExists) {
-    throw new ApiError(409, 'User with this email already exists');
-  }
-
-  // Create user
-  const user = await User.create({
-    name,
-    email,
-    passwordHash: password, // Mongoose pre-save hook handles hashing
-    targetRole,
-  });
+  let user = await User.findOne({ email });
 
   if (user) {
-    const { accessToken, refreshToken } = generateAuthTokens(user);
-
-    // Remove passwordHash from response
-    user.passwordHash = undefined;
-
-    res.status(201).json(
-      new ApiResponse(
-        201,
-        {
-          user,
-          accessToken,
-          refreshToken,
-        },
-        'User registered successfully'
-      )
-    );
+    // If user exists but doesn't have a googleId, link it
+    if (!user.googleId) {
+      user.googleId = googleId;
+      if (picture && !user.picture) {
+        user.picture = picture;
+      }
+      await user.save();
+    }
   } else {
-    throw new ApiError(500, 'Failed to register user');
-  }
-});
-
-/**
- * @desc    Login user
- * @route   POST /api/auth/login
- * @access  Public
- */
-export const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    throw new ApiError(400, 'Please provide email and password');
+    // Create new user
+    user = await User.create({
+      name,
+      email,
+      googleId,
+      picture,
+    });
   }
 
-  // Find user and explicitly select passwordHash
-  const user = await User.findOne({ email }).select('+passwordHash');
-
-  if (!user) {
-    throw new ApiError(401, 'Invalid credentials');
-  }
-
-  // Check if password matches
-  const isMatch = await user.comparePassword(password);
-
-  if (!isMatch) {
-    throw new ApiError(401, 'Invalid credentials');
-  }
-
-  // Generate tokens
+  // Generate our native JWTs
   const { accessToken, refreshToken } = generateAuthTokens(user);
-
-  // Remove passwordHash from response
-  user.passwordHash = undefined;
 
   res.status(200).json(
     new ApiResponse(
@@ -93,7 +66,7 @@ export const loginUser = asyncHandler(async (req, res) => {
         accessToken,
         refreshToken,
       },
-      'User logged in successfully'
+      'User authenticated successfully'
     )
   );
 });

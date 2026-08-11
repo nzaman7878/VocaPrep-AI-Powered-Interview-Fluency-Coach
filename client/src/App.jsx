@@ -8,7 +8,6 @@ import ProtectedRoute from './components/layout/ProtectedRoute';
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
-const RegisterPage = lazy(() => import('./pages/RegisterPage'));
 const RoleSelectionPage = lazy(() => import('./pages/RoleSelectionPage'));
 const InterviewPage = lazy(() => import('./pages/InterviewPage'));
 const SessionSummaryPage = lazy(() => import('./pages/SessionSummaryPage'));
@@ -49,7 +48,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
               {/* Protected Routes */}
