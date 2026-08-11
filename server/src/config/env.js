@@ -33,4 +33,6 @@ export const env = {
   CHROMA_URL: process.env.CHROMA_URL || 'http://localhost:8000',
   CLIENT_URL: process.env.CLIENT_URL || 'http://localhost:5173',
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
 };

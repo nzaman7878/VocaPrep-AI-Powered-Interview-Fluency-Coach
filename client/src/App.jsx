@@ -13,6 +13,7 @@ const InterviewPage = lazy(() => import('./pages/InterviewPage'));
 const SessionSummaryPage = lazy(() => import('./pages/SessionSummaryPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
@@ -50,6 +51,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
+              <Route path="/pricing" element={<PricingPage />} />
 
               {/* Protected Routes */}
               <Route

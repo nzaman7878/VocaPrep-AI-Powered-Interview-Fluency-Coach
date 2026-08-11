@@ -8,6 +8,7 @@ import {
 } from '../controllers/sessionController.js';
 import questionRoutes from './questionRoutes.js';
 import { protect } from '../middleware/auth.js';
+import { enforceUsageLimit } from '../middleware/subscriptionCheck.js';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.use(protect);
 // Mount question routes under a specific session
 router.use('/:id/questions', questionRoutes);
 
-router.route('/').post(createSession).get(getSessions);
+router.route('/').post(enforceUsageLimit, createSession).get(getSessions);
 
 router.route('/:id').get(getSessionById).put(updateSession);
 

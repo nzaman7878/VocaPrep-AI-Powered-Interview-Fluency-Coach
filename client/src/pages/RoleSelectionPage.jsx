@@ -55,7 +55,11 @@ const RoleSelectionPage = () => {
       navigate(`/interview/${response.data._id}`);
     } catch (error) {
       console.error('Failed to start interview:', error);
-      alert('Failed to start interview session. Please try again.');
+      if (error.response?.status === 403 && error.response?.data?.requiresUpgrade) {
+        navigate('/pricing');
+      } else {
+        alert('Failed to start interview session. Please try again.');
+      }
     } finally {
       setIsStarting(false);
     }

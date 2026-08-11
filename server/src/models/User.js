@@ -43,6 +43,21 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    stripeCustomerId: {
+      type: String,
+    },
+    stripeSubscriptionId: {
+      type: String,
+    },
+    subscriptionStatus: {
+      type: String,
+      enum: ['free', 'active', 'past_due', 'canceled'],
+      default: 'free',
+    },
+    usageCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt

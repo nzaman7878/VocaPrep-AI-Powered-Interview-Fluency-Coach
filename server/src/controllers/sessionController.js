@@ -25,6 +25,12 @@ export const createSession = asyncHandler(async (req, res) => {
     questions: [],
   });
 
+  // Increment usage count for free tier tracking
+  if (req.user.subscriptionStatus === 'free') {
+    req.user.usageCount += 1;
+    await req.user.save();
+  }
+
   res.status(201).json(new ApiResponse(201, session, 'Session created successfully'));
 });
 

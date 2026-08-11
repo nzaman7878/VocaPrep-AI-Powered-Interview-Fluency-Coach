@@ -23,6 +23,11 @@ app.use(
 // Apply global rate limiting
 app.use('/api', globalLimiter);
 
+import { webhookHandler } from './controllers/stripeController.js';
+
+// Stripe Webhook MUST be mounted before express.json()
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
+
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies with a limit
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
 
@@ -48,6 +53,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import sessionRoutes from './routes/sessionRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
+import stripeRoutes from './routes/stripeRoutes.js';
 import audioRoutes from './routes/audioRoutes.js';
 import transcriptionRoutes from './routes/transcriptionRoutes.js';
 import evaluationRoutes from './routes/evaluationRoutes.js';
@@ -58,6 +64,7 @@ app.use('/api/auth', authLimiter, authRoutes); // Stricter limit on auth routes
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/stripe', stripeRoutes);
 app.use('/api/audio', audioRoutes);
 app.use('/api/transcription', transcriptionRoutes);
 app.use('/api/evaluate', aiLimiter, evaluationRoutes); // Stricter limit on expensive AI evaluation
