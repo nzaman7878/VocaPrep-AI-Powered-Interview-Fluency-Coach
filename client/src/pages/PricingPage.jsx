@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useDocumentTitle from '../hooks/useDocumentTitle';
-import api from '../api/axiosConfig'; // fallback to standard axios if api auth config missing
+import api from '../api/axiosClient';
 import { useSelector } from 'react-redux';
 import Badge from '../components/ui/Badge';
 

@@ -88,13 +88,15 @@ export const Navbar = () => {
     dispatch(logout());
   };
 
-  const handleScrollTo = (e, id) => {
-    if (window.location.pathname === '/') {
-      e.preventDefault();
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-        window.history.pushState(null, '', `/#${id}`);
+  const handleScrollTo = (e, href, id) => {
+    if (href.startsWith('/#')) {
+      if (window.location.pathname === '/') {
+        e.preventDefault();
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', `/#${id}`);
+        }
       }
     }
     setIsMobileMenuOpen(false);
@@ -141,6 +143,7 @@ export const Navbar = () => {
   const navLinks = [
     { label: 'Features', href: '/#features', id: 'features' },
     { label: 'How it Works', href: '/#how-it-works', id: 'how-it-works' },
+    { label: 'Pricing', href: '/pricing', id: 'pricing' },
   ];
 
   return (
@@ -182,7 +185,7 @@ export const Navbar = () => {
             <Link
               key={link.label}
               to={link.href}
-              onClick={(e) => handleScrollTo(e, link.id)}
+              onClick={(e) => handleScrollTo(e, link.href, link.id)}
               className="text-sm font-semibold text-text-muted hover:text-text-primary transition-colors relative group py-2"
             >
               {link.label}
@@ -254,7 +257,7 @@ export const Navbar = () => {
                   <Link
                     key={link.label}
                     to={link.href}
-                    onClick={(e) => handleScrollTo(e, link.id)}
+                    onClick={(e) => handleScrollTo(e, link.href, link.id)}
                     className="text-lg font-semibold text-text-primary pb-4 border-b border-surface-elevated"
                   >
                     {link.label}
