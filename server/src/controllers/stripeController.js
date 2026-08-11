@@ -5,14 +5,13 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 
-const stripe = new Stripe(env.STRIPE_SECRET_KEY);
-
 /**
  * @desc    Create a Stripe Checkout Session
  * @route   POST /api/stripe/create-checkout-session
  * @access  Private
  */
 export const createCheckoutSession = asyncHandler(async (req, res) => {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
   const { priceId } = req.body;
   const user = req.user;
 
@@ -44,9 +43,9 @@ export const createCheckoutSession = asyncHandler(async (req, res) => {
  * @route   POST /api/stripe/webhook
  * @access  Public
  */
-export const webhookHandler = async (req, res) => {
+export const webhookHandler = asyncHandler(async (req, res) => {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
   const sig = req.headers['stripe-signature'];
-
   let event;
 
   try {
@@ -62,7 +61,7 @@ export const webhookHandler = async (req, res) => {
     case 'checkout.session.completed': {
       const session = event.data.object;
       const userId = session.client_reference_id;
-      
+
       if (userId) {
         await User.findByIdAndUpdate(userId, {
           subscriptionStatus: 'active',
@@ -72,7 +71,7 @@ export const webhookHandler = async (req, res) => {
       }
       break;
     }
-    
+
     case 'invoice.payment_succeeded': {
       const invoice = event.data.object;
       await User.findOneAndUpdate(
@@ -106,4 +105,4 @@ export const webhookHandler = async (req, res) => {
 
   // Return a 200 response to acknowledge receipt of the event
   res.send();
-};
+});
