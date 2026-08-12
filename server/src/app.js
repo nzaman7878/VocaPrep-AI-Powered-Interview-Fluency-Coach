@@ -58,10 +58,12 @@ import audioRoutes from './routes/audioRoutes.js';
 import transcriptionRoutes from './routes/transcriptionRoutes.js';
 import evaluationRoutes from './routes/evaluationRoutes.js';
 import questionGenRoutes from './routes/questionGenRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 // API Routes Setup
 app.use('/api/auth', authLimiter, authRoutes); // Stricter limit on auth routes
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/stripe', stripeRoutes);

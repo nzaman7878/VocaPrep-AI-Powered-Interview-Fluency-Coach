@@ -40,17 +40,15 @@ export const protect = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * Admin middleware - check if user is admin and matches ADMIN_EMAIL
+ * Admin middleware - check if user is admin or matches ADMIN_EMAIL
  */
 export const isAdmin = asyncHandler(async (req, res, next) => {
   const adminEmail = process.env.ADMIN_EMAIL;
 
-  if (!adminEmail) {
-    console.error('ADMIN_EMAIL environment variable is not set!');
-    throw new ApiError(500, 'Server configuration error');
-  }
-
-  if (req.user && req.user.role === 'admin' && req.user.email === adminEmail) {
+  if (
+    (req.user && req.user.role === 'admin') ||
+    (req.user && adminEmail && req.user.email === adminEmail)
+  ) {
     next();
   } else {
     throw new ApiError(403, 'Not authorized as an admin');
