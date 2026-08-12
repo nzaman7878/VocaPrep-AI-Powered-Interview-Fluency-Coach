@@ -17,6 +17,7 @@ const PricingPage = lazy(() => import('./pages/PricingPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const AdminRoute = lazy(() => import('./components/layout/AdminRoute'));
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -95,6 +96,14 @@ function App() {
                 element={
                   <AdminRoute>
                     <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminRoute>
+                    <AdminUsers />
                   </AdminRoute>
                 }
               />
