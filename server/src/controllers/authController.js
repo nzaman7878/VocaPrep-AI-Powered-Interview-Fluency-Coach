@@ -37,14 +37,23 @@ export const googleAuth = asyncHandler(async (req, res) => {
   let user = await User.findOne({ email });
 
   if (user) {
+    let shouldSave = false;
     // If user exists but doesn't have a googleId, link it
     if (!user.googleId) {
       user.googleId = googleId;
       if (picture && !user.picture) {
         user.picture = picture;
       }
-      await user.save();
+      shouldSave = true;
     }
+    
+    // Automatically promote to admin if email matches ADMIN_EMAIL in .env
+    if (user.email === process.env.ADMIN_EMAIL && user.role !== 'admin') {
+      user.role = 'admin';
+      shouldSave = true;
+    }
+    
+    if (shouldSave) await user.save();
   } else {
     // Create new user
     user = await User.create({
@@ -52,6 +61,7 @@ export const googleAuth = asyncHandler(async (req, res) => {
       email,
       googleId,
       picture,
+      role: email === process.env.ADMIN_EMAIL ? 'admin' : 'user',
     });
   }
 
