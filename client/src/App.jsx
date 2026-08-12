@@ -18,6 +18,8 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
+const AdminSubscriptions = lazy(() => import('./pages/admin/AdminSubscriptions'));
+const AdminAnalytics = lazy(() => import('./pages/admin/AdminAnalytics'));
 const AdminRoute = lazy(() => import('./components/layout/AdminRoute'));
 
 import { ThemeProvider } from './context/ThemeContext';
@@ -104,6 +106,22 @@ function App() {
                 element={
                   <AdminRoute>
                     <AdminUsers />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/subscriptions"
+                element={
+                  <AdminRoute>
+                    <AdminSubscriptions />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/analytics"
+                element={
+                  <AdminRoute>
+                    <AdminAnalytics />
                   </AdminRoute>
                 }
               />

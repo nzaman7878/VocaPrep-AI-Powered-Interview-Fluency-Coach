@@ -20,4 +20,14 @@ export const adminApi = {
     const response = await api.get('/admin/subscriptions');
     return response.data;
   },
+
+  getTransactions: async () => {
+    const response = await api.get('/admin/transactions');
+    return response.data;
+  },
+
+  getAnalytics: async () => {
+    const response = await api.get('/admin/analytics');
+    return response.data;
+  },
 };

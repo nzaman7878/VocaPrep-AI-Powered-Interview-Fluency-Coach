@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, CreditCard, Settings, X } from 'lucide-react';
+import { LayoutDashboard, Users, CreditCard, Settings, X, BarChart2 } from 'lucide-react';
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
@@ -9,7 +9,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     { name: 'Overview', path: '/admin', icon: LayoutDashboard },
     { name: 'User Management', path: '/admin/users', icon: Users },
     { name: 'Subscriptions', path: '/admin/subscriptions', icon: CreditCard },
-    { name: 'System Settings', path: '/admin/settings', icon: Settings },
+    { name: 'Analytics', path: '/admin/analytics', icon: BarChart2 },
   ];
 
   return (

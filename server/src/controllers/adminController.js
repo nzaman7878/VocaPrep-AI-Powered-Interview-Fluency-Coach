@@ -170,3 +170,98 @@ export const getSubscriptions = asyncHandler(async (req, res) => {
     new ApiResponse(200, { subscriptions: subscribers }, 'Subscriptions fetched successfully')
   );
 });
+
+/**
+ * @desc    Get recent transactions from Stripe
+ * @route   GET /api/admin/transactions
+ * @access  Private/Admin
+ */
+export const getTransactions = asyncHandler(async (req, res) => {
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
+  
+  try {
+    const charges = await stripe.charges.list({
+      limit: 50,
+    });
+    
+    // Map to a cleaner format for the frontend
+    const transactions = charges.data.map(charge => ({
+      id: charge.id,
+      amount: charge.amount / 100, // Convert from cents
+      currency: charge.currency,
+      status: charge.status,
+      receiptEmail: charge.receipt_email || charge.billing_details?.email || 'N/A',
+      createdAt: new Date(charge.created * 1000).toISOString(),
+      paid: charge.paid,
+      refunded: charge.refunded
+    }));
+    
+    res.status(200).json(
+      new ApiResponse(200, { transactions }, 'Transactions fetched successfully')
+    );
+  } catch (error) {
+    throw new ApiError(500, 'Failed to fetch transactions from Stripe: ' + error.message);
+  }
+});
+
+/**
+ * @desc    Get detailed AI analytics
+ * @route   GET /api/admin/analytics
+ * @access  Private/Admin
+ */
+export const getAnalytics = asyncHandler(async (req, res) => {
+  // Aggregate sessions by role
+  const sessionsByRole = await Session.aggregate([
+    {
+      $group: {
+        _id: '$role',
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $project: {
+        name: '$_id',
+        value: '$count',
+        _id: 0
+      }
+    },
+    {
+      $sort: { value: -1 }
+    }
+  ]);
+
+  // Calculate average WPM and Content Score across all questions in all sessions
+  // Since questions is an array inside sessions, we need to unwind it first
+  const averages = await Session.aggregate([
+    { $unwind: '$questions' },
+    {
+      $group: {
+        _id: null,
+        avgWpm: { $avg: '$questions.deliveryMetrics.wpm' },
+        avgContentScore: { $avg: '$questions.contentScore' },
+        avgFillerRate: { $avg: '$questions.deliveryMetrics.fillerRate' }
+      }
+    }
+  ]);
+
+  const stats = averages.length > 0 ? averages[0] : {
+    avgWpm: 0,
+    avgContentScore: 0,
+    avgFillerRate: 0
+  };
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        sessionsByRole,
+        globalAverages: {
+          wpm: Math.round(stats.avgWpm || 0),
+          contentScore: Number((stats.avgContentScore || 0).toFixed(1)),
+          fillerRate: Number((stats.avgFillerRate || 0).toFixed(1))
+        }
+      },
+      'Analytics fetched successfully'
+    )
+  );
+});

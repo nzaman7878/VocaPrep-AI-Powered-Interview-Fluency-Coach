@@ -4,6 +4,8 @@ import {
   getUsers,
   updateUserRole,
   getSubscriptions,
+  getTransactions,
+  getAnalytics,
 } from '../controllers/adminController.js';
 import { protect, isAdmin } from '../middleware/auth.js';
 
@@ -23,5 +25,11 @@ router.put('/users/:id', updateUserRole);
 
 // GET /api/admin/subscriptions
 router.get('/subscriptions', getSubscriptions);
+
+// GET /api/admin/transactions
+router.get('/transactions', getTransactions);
+
+// GET /api/admin/analytics
+router.get('/analytics', getAnalytics);
 
 export default router;
