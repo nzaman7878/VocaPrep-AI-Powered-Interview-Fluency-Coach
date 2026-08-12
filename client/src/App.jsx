@@ -16,6 +16,8 @@ const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
 const PricingPage = lazy(() => import('./pages/PricingPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminRoute = lazy(() => import('./components/layout/AdminRoute'));
 
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -84,6 +86,24 @@ function App() {
                   <ProtectedRoute>
                     <DashboardPage />
                   </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/*"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
                 }
               />
 

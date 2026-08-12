@@ -30,7 +30,7 @@ const generateAdminTokenAndTest = async () => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log('Generated token for admin:', token.substring(0, 20) + '...');
+    console.log('Generated token for admin:', token);
 
     // Now test the routes using fetch
     console.log('\n--- GET /api/admin/stats ---');
