@@ -23,27 +23,92 @@ export const getStats = asyncHandler(async (req, res) => {
   // 3. Total AI Usage (Interviews started)
   const totalAIUsage = await Session.countDocuments();
 
-  // 4. Total Revenue (Fetch recent charges from Stripe and sum them up)
-  // For MVP, we fetch the 100 most recent charges. In production, caching or a separate tracking system is better.
+  // 4. Time Series Data Preparation (Last 6 Months)
+  const months = [];
+  const currentDate = new Date();
+  const sixMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 5, 1);
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+    months.push({
+      label: d.toLocaleString('default', { month: 'short' }),
+      year: d.getFullYear(),
+      month: d.getMonth() + 1, // 1-12
+      usersCreated: 0,
+      revenueAdded: 0
+    });
+  }
+
+  // Get cumulative users up to 6 months ago
+  let cumulativeUsers = await User.countDocuments({ createdAt: { $lt: sixMonthsAgo } });
+
+  // Aggregate users created in the last 6 months
+  const userAggregation = await User.aggregate([
+    {
+      $match: {
+        createdAt: { $gte: sixMonthsAgo }
+      }
+    },
+    {
+      $group: {
+        _id: { month: { $month: "$createdAt" }, year: { $year: "$createdAt" } },
+        count: { $sum: 1 }
+      }
+    }
+  ]);
+
+  // Merge user aggregation into months array
+  userAggregation.forEach(agg => {
+    const monthObj = months.find(m => m.month === agg._id.month && m.year === agg._id.year);
+    if (monthObj) {
+      monthObj.usersCreated = agg.count;
+    }
+  });
+
+  // Stripe Revenue
   let totalRevenue = 0;
+  let cumulativeRevenue = 0; // We'll assume starting revenue before the 100 charges is 0 for MVP
   try {
     const charges = await stripe.charges.list({
-      limit: 100,
+      limit: 100, // Fetching 100 most recent charges
     });
     
-    // Sum only successful, paid charges (in cents)
-    const totalCents = charges.data.reduce((acc, charge) => {
-      if (charge.paid && !charge.refunded) {
-        return acc + charge.amount;
+    // Sort charges ascending by creation date
+    const sortedCharges = charges.data
+      .filter(charge => charge.paid && !charge.refunded)
+      .sort((a, b) => a.created - b.created);
+
+    sortedCharges.forEach(charge => {
+      const amount = charge.amount / 100;
+      totalRevenue += amount;
+      
+      const chargeDate = new Date(charge.created * 1000);
+      if (chargeDate >= sixMonthsAgo) {
+        const monthObj = months.find(m => m.month === (chargeDate.getMonth() + 1) && m.year === chargeDate.getFullYear());
+        if (monthObj) {
+          monthObj.revenueAdded += amount;
+        } else {
+           // Charge is newer than our 6-month window? (Shouldn't happen)
+        }
+      } else {
+        // Charge is older than 6 months, add to base cumulative
+        cumulativeRevenue += amount;
       }
-      return acc;
-    }, 0);
-    
-    totalRevenue = totalCents / 100; // Convert to dollars
+    });
   } catch (error) {
     console.error('Failed to fetch revenue from Stripe:', error.message);
-    // Continue without crashing, revenue will be 0
   }
+
+  // Build final timeSeries array
+  const timeSeriesData = months.map(m => {
+    cumulativeUsers += m.usersCreated;
+    cumulativeRevenue += m.revenueAdded;
+    return {
+      month: m.label,
+      Users: cumulativeUsers,
+      Revenue: Math.round(cumulativeRevenue)
+    };
+  });
 
   res.status(200).json(
     new ApiResponse(
@@ -53,6 +118,7 @@ export const getStats = asyncHandler(async (req, res) => {
         activeSubscriptions,
         totalAIUsage,
         totalRevenue,
+        timeSeriesData
       },
       'Admin statistics fetched successfully'
     )

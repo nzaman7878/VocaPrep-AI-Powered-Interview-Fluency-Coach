@@ -11,7 +11,12 @@ export default function LoginForm() {
   const handleSuccess = async (credentialResponse) => {
     const resultAction = await dispatch(googleLogin(credentialResponse.credential));
     if (googleLogin.fulfilled.match(resultAction)) {
-      navigate('/dashboard');
+      const user = resultAction.payload.user;
+      if (user && user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     }
   };
 

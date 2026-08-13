@@ -22,6 +22,11 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // If we have a user but they are an admin, they shouldn't access standard user routes
+  if (user && user.role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
+
   // If we have a user (or token exists but wasn't cleared by failed fetch), render children
   return children;
 };

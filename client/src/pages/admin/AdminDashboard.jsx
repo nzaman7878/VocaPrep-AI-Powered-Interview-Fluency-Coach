@@ -38,41 +38,10 @@ const AdminDashboard = () => {
     fetchDashboardData();
   }, []);
 
-  // Generate realistic mock time-series data for the charts based on totals
-  // In a real application, the backend should return this grouped by month/day.
+  // Consume the real time-series data from the backend payload
   const chartData = useMemo(() => {
-    if (!stats) return [];
-    
-    // We'll generate 6 months of historical data leading up to the current total
-    const months = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-    
-    // Distribute total users roughly over 6 months
-    let cumulativeUsers = Math.max(1, Math.floor(stats.totalUsers * 0.2));
-    let cumulativeRevenue = Math.max(0, stats.totalRevenue * 0.1);
-    
-    return months.map((month, index) => {
-      // For the last month, ensure we hit the exact total
-      if (index === months.length - 1) {
-        return {
-          month,
-          Users: stats.totalUsers,
-          Revenue: Math.round(stats.totalRevenue)
-        };
-      }
-      
-      // Add random growth for previous months
-      const userGrowth = Math.max(0, Math.floor((stats.totalUsers - cumulativeUsers) / (6 - index) * (0.8 + Math.random() * 0.4)));
-      const revenueGrowth = Math.max(0, (stats.totalRevenue - cumulativeRevenue) / (6 - index) * (0.7 + Math.random() * 0.6));
-      
-      cumulativeUsers += userGrowth;
-      cumulativeRevenue += revenueGrowth;
-      
-      return {
-        month,
-        Users: cumulativeUsers,
-        Revenue: Math.round(cumulativeRevenue)
-      };
-    });
+    if (!stats || !stats.timeSeriesData) return [];
+    return stats.timeSeriesData;
   }, [stats]);
 
   if (isLoading) {

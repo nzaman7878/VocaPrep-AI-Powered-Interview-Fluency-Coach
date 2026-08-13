@@ -13,7 +13,16 @@ export default function LoginPage() {
     dispatch(clearError());
   }, [dispatch]);
 
-  if (user || token) {
+  if (user) {
+    if (user.role === 'admin') {
+      return <Navigate to="/admin" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  } else if (token) {
+    // If we only have a token but user profile isn't fetched yet,
+    // wait for App.jsx to finish fetching the user before making routing decisions.
+    // However, if we're here, it means App.jsx let us render LoginPage.
+    // So we'll just redirect to dashboard as a safe default, and ProtectedRoute/AdminRoute will catch it.
     return <Navigate to="/dashboard" replace />;
   }
 
