@@ -87,15 +87,27 @@ const AdminDashboard = () => {
           title="Total Users"
           value={stats?.totalUsers.toLocaleString()}
           icon={Users}
-          trend={12}
+          trend={(() => {
+            if (!chartData || chartData.length < 2) return 0;
+            const current = chartData[chartData.length - 1].Users;
+            const previous = chartData[chartData.length - 2].Users;
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return Math.round(((current - previous) / previous) * 100);
+          })()}
           trendLabel="vs last month"
           color="primary"
         />
         <AdminStatCard
-          title="Total Revenue"
+          title="Estimated MRR"
           value={`$${stats?.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           icon={DollarSign}
-          trend={8.5}
+          trend={(() => {
+            if (!chartData || chartData.length < 2) return 0;
+            const current = chartData[chartData.length - 1].Revenue;
+            const previous = chartData[chartData.length - 2].Revenue;
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return Math.round(((current - previous) / previous) * 100);
+          })()}
           trendLabel="vs last month"
           color="success"
         />
@@ -103,7 +115,7 @@ const AdminDashboard = () => {
           title="AI Usage (Sessions)"
           value={stats?.totalAIUsage.toLocaleString()}
           icon={Activity}
-          trend={24}
+          trend={10} // Backend doesn't split sessions by month yet, leaving placeholder
           trendLabel="vs last month"
           color="info"
         />
@@ -111,7 +123,7 @@ const AdminDashboard = () => {
           title="Active Subscriptions"
           value={stats?.activeSubscriptions.toLocaleString()}
           icon={CreditCard}
-          trend={-2}
+          trend={0} // Active subs is a static current snapshot, leaving 0% for now
           trendLabel="vs last month"
           color="warning"
         />
@@ -121,7 +133,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div className="h-[400px]">
           <AdminTrendChart
-            title="Revenue Growth"
+            title="MRR Growth"
             data={chartData}
             dataKey="Revenue"
             xAxisKey="month"

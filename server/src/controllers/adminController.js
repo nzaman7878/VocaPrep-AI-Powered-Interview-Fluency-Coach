@@ -65,48 +65,23 @@ export const getStats = asyncHandler(async (req, res) => {
     }
   });
 
-  // Stripe Revenue
-  let totalRevenue = 0;
-  let cumulativeRevenue = 0; // We'll assume starting revenue before the 100 charges is 0 for MVP
-  try {
-    const charges = await stripe.charges.list({
-      limit: 100, // Fetching 100 most recent charges
-    });
-    
-    // Sort charges ascending by creation date
-    const sortedCharges = charges.data
-      .filter(charge => charge.paid && !charge.refunded)
-      .sort((a, b) => a.created - b.created);
+  // Calculate Estimated MRR based on subscriptions ($9/mo average for MVP)
+  // We'll map the historical user growth directly to MRR growth
+  const mrrPerUser = 9;
+  const totalRevenue = activeSubscriptions * mrrPerUser;
 
-    sortedCharges.forEach(charge => {
-      const amount = charge.amount / 100;
-      totalRevenue += amount;
-      
-      const chargeDate = new Date(charge.created * 1000);
-      if (chargeDate >= sixMonthsAgo) {
-        const monthObj = months.find(m => m.month === (chargeDate.getMonth() + 1) && m.year === chargeDate.getFullYear());
-        if (monthObj) {
-          monthObj.revenueAdded += amount;
-        } else {
-           // Charge is newer than our 6-month window? (Shouldn't happen)
-        }
-      } else {
-        // Charge is older than 6 months, add to base cumulative
-        cumulativeRevenue += amount;
-      }
-    });
-  } catch (error) {
-    console.error('Failed to fetch revenue from Stripe:', error.message);
-  }
+  let cumulativeRevenue = cumulativeUsers * mrrPerUser;
 
   // Build final timeSeries array
   const timeSeriesData = months.map(m => {
     cumulativeUsers += m.usersCreated;
-    cumulativeRevenue += m.revenueAdded;
+    // MRR grows linearly with users for this estimation model
+    cumulativeRevenue = cumulativeUsers * mrrPerUser;
+    
     return {
       month: m.label,
       Users: cumulativeUsers,
-      Revenue: Math.round(cumulativeRevenue)
+      Revenue: cumulativeRevenue
     };
   });
 
